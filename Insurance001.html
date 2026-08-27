@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>身故理賠金課稅分析</title>
+    
+    <style>
+        :root {
+            --primary: #0f172a;       /* 經典深石板藍 */
+            --primary-light: #38bdf8; /* 天空藍 */
+            --success: #10b981;       /* 翡翠綠 - 免稅/安全 */
+            --warning: #f59e0b;       /* 琥珀金 - 贈與稅/中風險 */
+            --danger: #ef4444;        /* 珊瑚紅 - 遺產稅/高風險 */
+            --info: #3b82f6;          /* 湛藍 - 資訊 */
+            --bg-main: #f8fafc;       /* 淺灰底 */
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 15px;
+            position: relative;
+        }
+
+        /* LINE 按鈕樣式 (簡潔正方形圖示) */
+        .line-icon-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: inline-block;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px; /* 圓角矩形，仿官方風格 */
+            background-color: #06C755;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .line-icon-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .line-icon-btn svg {
+            fill: #ffffff;
+            width: 28px;
+            height: 28px;
+        }
+
+        @media (max-width: 480px) {
+            .line-icon-btn {
+                top: 10px;
+                right: 10px;
+                width: 38px;
+                height: 38px;
+                border-radius: 8px;
+            }
+            .line-icon-btn svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        .tool-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px 0;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        @media (max-width: 480px) {
+            .tool-header {
+                padding-top: 45px; /* 給右上角 LINE 按鈕保留空間避免標題重疊 */
+            }
+        }
+
+        .tool-header h1 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .tool-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* 導覽頁籤 (強化 RWD 與觸控體驗) */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            background-color: #e2e8f0;
+            color: var(--text-dark);
+            border: none;
+            padding: 12px 16px; /* 增加觸控範圍 */
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1 1 auto;
+            min-width: 140px; /* 確保手機上不會縮太小 */
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-btn:hover {
+            background-color: #cbd5e1;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 6px rgba(15, 23, 42, 0.1);
+        }
+
+        /* 區塊包裝 */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 卡片設計 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        /* 互動問答精靈 (Wizard) */
+        .wizard-container {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .question-box {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: var(--primary);
+            line-height: 1.4;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .options-grid.single-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-btn {
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px; /* 加大按鈕，方便手機點擊 */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .option-btn:hover, .option-btn:active {
+            border-color: var(--primary-light);
+            background-color: #f0f9ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(56, 189, 248, 0.1);
+        }
+
+        .option-btn .btn-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        .option-btn .btn-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .wizard-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-action {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s;
+        }
+
+        .back-btn {
+            background: #e2e8f0;
+            color: var(--text-dark);
+            display: none;
+        }
+
+        .back-btn:hover { background: #cbd5e1; }
+
+        .restart-btn {
+            background: #64748b;
+            color: #ffffff;
+        }
+        
+        .restart-btn:hover { background: #475569; }
+
+        /* 判定結果樣式 */
+        .result-box {
+            display: none;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .result-box.tax-exempt { background-color: #f0fdf4; border-left: 6px solid var(--success); }
+        .result-box.estate-tax { background-color: #fef2f2; border-left: 6px solid var(--danger); }
+        .result-box.gift-tax { background-color: #fffbeb; border-left: 6px solid var(--warning); }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 6px;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .badge.bg-success { background-color: var(--success); }
+        .badge.bg-warning { background-color: var(--warning); color: #78350f; }
+        .badge.bg-danger { background-color: var(--danger); }
+
+        /* 四大情境對照表 */
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .scenarios-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .scenario-card {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .scenario-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-color: #cbd5e1;
+        }
+
+        .scenario-card h3 {
+            font-size: 17px;
+            margin-bottom: 12px;
+            color: var(--primary);
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .relation-flow {
+            font-size: 14px;
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border-left: 3px solid #94a3b8;
+        }
+
+        .relation-flow span {
+            font-weight: bold;
+        }
+
+        .bullet-list {
+            margin-left: 20px;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        .bullet-list li {
+            margin-bottom: 8px;
+        }
+
+        /* 實質課稅原則檢測器 */
+        .detector-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .detector-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .checkbox-label:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        
+        .checkbox-label:active {
+            background-color: #e2e8f0;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-label .label-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .checkbox-label .check-title {
+            font-weight: bold;
+            font-size: 15px;
+            color: var(--primary);
+        }
+
+        .checkbox-label .check-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .risk-gauge-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .risk-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .risk-level {
+            font-size: 22px;
+            font-weight: 800;
+            padding: 6px 20px;
+            border-radius: 20px;
+            color: white;
+            margin-bottom: 12px;
+            min-width: 140px;
+            transition: all 0.3s;
+        }
+
+        .risk-level.low { background-color: var(--success); }
+        .risk-level.medium { background-color: var(--warning); color: #78350f;}
+        .risk-level.high { background-color: var(--danger); }
+
+        .risk-desc {
+            font-size: 14px;
+            color: var(--text-dark);
+            max-width: 600px;
+            line-height: 1.5;
+        }
+        
+        /* 手機版微調 */
+        @media (max-width: 480px) {
+            .tool-header h1 { font-size: 20px; }
+            .card { padding: 15px; }
+            .question-box { font-size: 16px; }
+            .scenario-card { padding: 15px; }
+            .tab-btn { padding: 10px 12px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 加入 LINE 按鈕 (簡潔版) -->
+    <a href="https://lin.ee/udQp9wm" target="_blank" class="line-icon-btn" title="加入LINE好友">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <!-- 這裡使用一個更接近官方風格且沒有內建英文字的純淨對話泡泡 SVG -->
+            <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.122.303.039.782-.039 1.127l-.271 1.636c-.078.432-.375 1.832 1.618.995 1.991-.837 10.744-6.331 11.6-14.22z"/>
+        </svg>
+    </a>
+
+    <div class="tool-header">
+        <h1>身故理賠金課稅四大情境互動分析</h1>
+        <p>快速釐清要保人、被保人與受益人架構之稅務風險</p>
+    </div>
+
+    <!-- 頁籤導覽 -->
+    <div class="tabs">
+        <button id="btn-tab-wizard" class="tab-btn active" onclick="switchTab('wizard')">💡 智慧架構診斷</button>
+        <button id="btn-tab-comparison" class="tab-btn" onclick="switchTab('comparison')">📋 四大情境全覽</button>
+        <button id="btn-tab-detector" class="tab-btn" onclick="switchTab('detector')">⚠️ 實質課稅檢測</button>
+    </div>
+
+    <!-- 頁面 1: 智慧架構診斷 -->
+    <section id="sec-wizard" class="content-section active">
+        <div class="card">
+            <div class="card-title">🔍 互動診斷流程（點選按鈕開始）</div>
+            
+            <div class="wizard-container">
+                <div id="wizard-question-box" class="question-box">請問在這張保單的規劃中，是誰先不幸身故？</div>
+                <div id="wizard-options-grid" class="options-grid"></div>
+                <div class="wizard-actions">
+                    <button id="btn-back" class="btn-action back-btn" onclick="wizardBack()">← 上一步</button>
+                    <button class="btn-action restart-btn" onclick="resetWizard()">重新檢測</button>
+                </div>
+            </div>
+
+            <!-- 診斷判定結果 -->
+            <div id="wizard-result" class="result-box">
+                <div id="result-badge" class="badge"></div>
+                <h2 id="result-title" style="margin-bottom: 12px; font-size: 18px; color: var(--primary); line-height: 1.4;"></h2>
+                <div id="result-relation" class="relation-flow"></div>
+                <div id="result-details" style="font-size: 14px; margin-bottom: 15px; line-height: 1.6; color: var(--text-dark);"></div>
+                <div style="background: rgba(56, 189, 248, 0.1); padding: 12px; border-radius: 8px; border: 1px solid #bae6fd;">
+                    <strong style="color: #0369a1; display:block; margin-bottom: 6px; font-size:14px;">💡 專業規劃建議：</strong>
+                    <span id="result-suggestion" style="font-size: 14px; color: #0f172a; line-height: 1.5;"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁面 2: 四大情境全覽 -->
+    <section id="sec-comparison" class="content-section">
+        <div class="card">
+            <div class="card-title">📋 壽險保單常見四大稅務情境對照</div>
+
+            <div class="scenarios-grid">
+                <!-- 情境 1 -->
+                <div class="scenario-card" style="border-top: 4px solid var(--success);">
+                    <span class="badge bg-success">免課遺產稅</span>
+                    <h3>情境 1：常規最安全架構</h3>
+                    <div class="relation-flow">
+                        <div><strong>要保人 ＝ 被保險人</strong> (例如：父親自己買壽險)</div>
+                        <div><strong>受益人 ＝ 已指定子女/配偶</strong></div>
+                        <div><strong>死亡事故：</strong>被保險人身故</div>
+                    </div>
+                    <ul class="bullet-list">
+                        <li><strong>稅務判定：</strong>原則上<strong>免計入被保險人遺產總額</strong>。</li>
+                        <li><strong>注意事項：</strong>當受益人領取之死亡給付每戶全年合計<strong>超過 3,740 萬元</strong>時，超過部分需計入「基本所得額」課徵最低稅負制。</li>
+                    </ul>
+                </div>
+
+                <!-- 情境 2 -->
+                <div class="scenario-card" style="border-top: 4px solid var(--danger);">
+                    <span class="badge bg-danger">課徵遺產稅</span>
+                    <h3>情境 2：未指定受益人架構</h3>
+                    <div class="relation-flow">
+                        <div><strong>要保人 ＝ 被保險人</strong> (例如：父親自己買壽險)</div>
+                        <div><strong>受益人 ＝ 未填寫 (或已故)</strong></div>
+                        <div><strong>死亡事故：</strong>被保險人身故</div>
+                    </div>
+                    <ul class="bullet-list">
+                        <li><strong>稅務判定：</strong>保險理賠金<strong>列為被保險人的「遺產」</strong>。</li>
+                        <li><strong>法條依據：</strong>《保險法》第113條規定，死亡保險未指定受益人者，其金額作為被保險人遺產。</li>
+                    </ul>
+                </div>
+
+                <!-- 情境 3 -->
+                <div class="scenario-card" style="border-top: 4px solid var(--warning);">
+                    <span class="badge bg-warning">課徵贈與稅</span>
+                    <h3>情境 3：要、被保人非同一人</h3>
+                    <div class="relation-flow">
+                        <div><strong>要保人 ≠ 被保險人</strong> (例如：母親幫父親投保)</div>
+                        <div><strong>受益人 ＝ 子女</strong></div>
+                        <div><strong>死亡事故：</strong>被保險人(父親)身故</div>
+                    </div>
+                    <ul class="bullet-list">
+                        <li><strong>稅務判定：</strong>理賠金會被國稅局認定為<strong>要保人(母親)對受益人(子女)之「贈與」</strong>，須課贈與稅。</li>
+                        <li><strong>重要提醒：</strong>「出資人（要保人）」與「受益人」不同人時，給付即屬贈與行為。</li>
+                    </ul>
+                </div>
+
+                <!-- 情境 4 -->
+                <div class="scenario-card" style="border-top: 4px solid var(--danger);">
+                    <span class="badge bg-danger">保單價值計入遺產</span>
+                    <h3>情境 4：要保人先身故</h3>
+                    <div class="relation-flow">
+                        <div><strong>要保人 ≠ 被保險人</strong> (例如：母親幫父親投保)</div>
+                        <div><strong>受益人 ＝ 子女</strong></div>
+                        <div><strong>死亡事故：</strong>要保人(母親)先逝世，父親健在</div>
+                    </div>
+                    <ul class="bullet-list">
+                        <li><strong>稅務判定：</strong>無身故理賠。但「保單價值準備金」屬於要保人財產，必須<strong>併入要保人的遺產總額</strong>。</li>
+                        <li><strong>解決方案：</strong>繼承人必須辦理「變更要保人」繼承手續。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁面 3: 實質課稅原則檢測 -->
+    <section id="sec-detector" class="content-section">
+        <div class="card">
+            <div class="card-title">⚠️ 實質課稅原則「八大樣態」自我檢測</div>
+            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5;">
+                即使保單結構符合免稅情境（情境 1），如果投保行為帶有明顯規避稅負意圖，國稅局仍可依據<strong>「實質課稅原則」</strong>將保險金納入遺產課稅。請勾選以下符合現狀的樣態：
+            </p>
+
+            <div class="detector-grid">
+                <label class="checkbox-label">
+                    <input type="checkbox" class="risk-checkbox" value="舉債投保" onchange="calculateRisk()">
+                    <div class="label-text">
+                        <span class="check-title">1. 舉債投保</span>
+                        <span class="check-desc">向銀行借款或將不動產抵押來購買保險。</span>
+                    </div>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="risk-checkbox" value="鉅額投保" onchange="calculateRisk()">
+                    <div class="label-text">
+                        <span class="check-title">2. 鉅額投保</span>
+                        <span class="check-desc">保險金額極高，與被保險人生前財產及日常開銷顯不相當。</span>
+                    </div>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="risk-checkbox" value="重病投保" onchange="calculateRisk()">
+                    <div class="label-text">
+                        <span class="check-title">3. 重病投保</span>
+                        <span class="check-desc">在得知罹患重病、癌症末期或急診住院期間購買保險。</span>
+                    </div>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="risk-checkbox" value="高齡投保" onchange="calculateRisk()">
+                    <div class="label-text">
+                        <span class="check-title">4. 高齡投保</span>
+                        <span class="check-desc">高齡者（如 75 或 80 歲以上）購買高保費或投資型壽險。</span>
+                    </div>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="risk-checkbox" value="短期投保" onchange="calculateRisk()">
+                    <div class="label-text">
+                        <span class="check-title">5. 短期投保</span>
+                        <span class="check-desc">購買保險後，短期內（如 1~3 年內）即發生身故事故。</span>
+                    </div>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="risk-checkbox" value="躉繳投保" onchange="calculateRisk()">
+                    <div class="label-text">
+                        <span class="check-title">6. 躉繳投保</span>
+                        <span class="check-desc">一次性繳清數百萬至數千萬的高額保費。</span>
+                    </div>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="risk-checkbox" value="密集投保" onchange="calculateRisk()">
+                    <div class="label-text">
+                        <span class="check-title">7. 密集投保</span>
+                        <span class="check-desc">在極短的時間內向多家保險公司密集投保。</span>
+                    </div>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" class="risk-checkbox" value="保費相當於保險金額" onchange="calculateRisk()">
+                    <div class="label-text">
+                        <span class="check-title">8. 保費相當於保險金</span>
+                        <span class="check-desc">躉繳保費與理賠金額相差無幾，缺乏人身保障之實質功能。</span>
+                    </div>
+                </label>
+            </div>
+
+            <div class="risk-gauge-container">
+                <div class="risk-title">國稅局實質課稅查核風險：</div>
+                <div id="risk-badge-box" class="risk-level low">低風險 (0/8)</div>
+                <div id="risk-desc-text" class="risk-desc">目前未勾選任何異常樣態，被依實質課稅原則課稅的機率極低。</div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    // 頁籤切換邏輯
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+        
+        if (tabName === 'wizard') {
+            document.getElementById('btn-tab-wizard').classList.add('active');
+            document.getElementById('sec-wizard').classList.add('active');
+        } else if (tabName === 'comparison') {
+            document.getElementById('btn-tab-comparison').classList.add('active');
+            document.getElementById('sec-comparison').classList.add('active');
+        } else if (tabName === 'detector') {
+            document.getElementById('btn-tab-detector').classList.add('active');
+            document.getElementById('sec-detector').classList.add('active');
+        }
+    }
+
+    // 智慧診斷問題設定
+    const wizardSteps = {
+        start: {
+            question: "在這張保單的規劃中，哪一位先身故過世？",
+            options: [
+                { text: "被保險人 (身故給付事故發生)", value: "insured_dead" },
+                { text: "要保人 (保費支付人，此時被保人健在)", value: "proposer_dead" }
+            ]
+        },
+        insured_dead: {
+            question: "要保人 與 被保險人 是否為同一個人？",
+            options: [
+                { text: "是同一個人 (例如：父親自己投保壽險)", value: "same_person" },
+                { text: "不是同一個人 (例如：妻子幫丈夫投保)", value: "diff_person" }
+            ]
+        },
+        same_person: {
+            question: "這張保單「有指定受益人」嗎？",
+            options: [
+                { text: "有指定受益人 (包含指定特定人名，或填寫「法定繼承人」)", value: "has_beneficiary" },
+                { text: "未指定受益人 (或指定受益人已死亡而未前往變更)", value: "no_beneficiary" }
+            ]
+        }
+    };
+
+    let wizardHistory = [];
+    let currentStep = "start";
+
+    function renderWizardStep() {
+        const stepData = wizardSteps[currentStep];
+        const questionBox = document.getElementById('wizard-question-box');
+        const optionsGrid = document.getElementById('wizard-options-grid');
+        const backBtn = document.getElementById('btn-back');
+        const resultBox = document.getElementById('wizard-result');
+
+        if (!stepData) {
+            handleWizardResult(currentStep);
+            questionBox.style.display = 'none';
+            optionsGrid.style.display = 'none';
+            backBtn.style.display = 'inline-block';
+            return;
+        }
+
+        questionBox.style.display = 'block';
+        optionsGrid.style.display = 'grid';
+        resultBox.style.display = 'none';
+
+        questionBox.innerText = stepData.question;
+        optionsGrid.innerHTML = '';
+
+        if (stepData.options.length === 1) {
+            optionsGrid.className = "options-grid single-col";
+        } else {
+            optionsGrid.className = "options-grid";
+        }
+
+        stepData.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = "option-btn";
+            btn.onclick = () => selectOption(opt.value);
+
+            let descText = "";
+            if (opt.value === "insured_dead") descText = "發生理賠身故。";
+            else if (opt.value === "proposer_dead") descText = "保費支付人先過世，被保人仍存活。";
+            else if (opt.value === "same_person") descText = "最標準、最普遍的投保方式。";
+            else if (opt.value === "diff_person") descText = "家人代投保或父母規劃傳承。";
+            else if (opt.value === "has_beneficiary") descText = "保單上有指定具體人名或有寫「法定繼承人」。";
+            else if (opt.value === "no_beneficiary") descText = "空白、指定人不詳或指定的受益人比自己早逝。";
+
+            btn.innerHTML = `
+                <span class="btn-title">${opt.text}</span>
+                <span class="btn-desc">${descText}</span>
+            `;
+            optionsGrid.appendChild(btn);
+        });
+
+        backBtn.style.display = wizardHistory.length > 0 ? 'inline-block' : 'none';
+    }
+
+    function selectOption(val) {
+        wizardHistory.push(currentStep);
+        if (currentStep === "start" && val === "proposer_dead") {
+            currentStep = "scenario_4";
+        } else if (currentStep === "start" && val === "insured_dead") {
+            currentStep = "insured_dead";
+        } else if (currentStep === "insured_dead" && val === "same_person") {
+            currentStep = "same_person";
+        } else if (currentStep === "insured_dead" && val === "diff_person") {
+            currentStep = "scenario_3";
+        } else if (currentStep === "same_person" && val === "has_beneficiary") {
+            currentStep = "scenario_1";
+        } else if (currentStep === "same_person" && val === "no_beneficiary") {
+            currentStep = "scenario_2";
+        }
+        renderWizardStep();
+    }
+
+    function wizardBack() {
+        if (wizardHistory.length > 0) {
+            currentStep = wizardHistory.pop();
+            renderWizardStep();
+        }
+    }
+
+    function resetWizard() {
+        wizardHistory = [];
+        currentStep = "start";
+        renderWizardStep();
+    }
+
+    function handleWizardResult(resultKey) {
+        const resultBox = document.getElementById('wizard-result');
+        const badge = document.getElementById('result-badge');
+        const title = document.getElementById('result-title');
+        const relation = document.getElementById('result-relation');
+        const details = document.getElementById('result-details');
+        const suggestion = document.getElementById('result-suggestion');
+
+        resultBox.style.display = 'block';
+
+        if (resultKey === 'scenario_1') {
+            resultBox.className = "result-box tax-exempt";
+            badge.className = "badge bg-success";
+            badge.innerText = "⭐ 情境 1：依法免徵遺產稅";
+            title.innerText = "身故理賠金原則上免計入遺產總額！";
+            relation.innerHTML = "<strong>目前架構：</strong> 要保人(A) ＝ 被保險人(A)，且已指定受益人(B)，被保險人(A)身故。";
+            details.innerHTML = `
+                依《保險法》第112條及《遺產及贈與稅法》第16條第9款規定，保險金<strong>不計入遺產總額</strong>。<br>
+                <strong>⚠️ 潛在所得稅風險（最低稅負制）：</strong><br>
+                受益人領取之身故給付金，每申報戶全年合計<strong>超過 3,740 萬元</strong>的部分，需併入「基本所得額」課徵最低稅負制。
+            `;
+            suggestion.innerText = "此為最合規合理的傳承配置。若理賠金很高，建議可透過「複數受益人拆分」或「分批、多保單分散受益人」來降低所得基本稅額衝擊。";
+        } 
+        else if (resultKey === 'scenario_2') {
+            resultBox.className = "result-box estate-tax";
+            badge.className = "badge bg-danger";
+            badge.innerText = "⚠️ 情境 2：列為遺產，課徵遺產稅";
+            title.innerText = "因「未指定受益人」，這筆理賠金會列入遺產課稅！";
+            relation.innerHTML = "<strong>目前架構：</strong> 要保人(A) ＝ 被保險人(A)，但「未」指定受益人，被保險人(A)身故。";
+            details.innerHTML = `
+                依《保險法》第113條規定，未指定受益人者，理賠金額<strong>作為被保險人之遺產</strong>。<br>
+                國稅局將併入被繼承人生前遺產，依法課徵<strong>遺產稅</strong>（累進稅率 10% ~ 20%）。
+            `;
+            suggestion.innerText = "請立即向保險公司申請「變更/補填受益人」！強烈建議不只要填寫特定家屬姓名，更一定要在最後加上「法定繼承人」作為保險順位保障。";
+        } 
+        else if (resultKey === 'scenario_3') {
+            resultBox.className = "result-box gift-tax";
+            badge.className = "badge bg-warning";
+            badge.innerText = "⚠️ 情境 3：涉及實質贈與，課徵贈與稅";
+            title.innerText = "要保人與被保人不同人，保險金可能課徵贈與稅！";
+            relation.innerHTML = "<strong>目前架構：</strong> 要保人(A) ≠ 被保險人(B)（如妻投保夫），受益人為(C)（子女），被保人(B)身故。";
+            details.innerHTML = `
+                在稅務法理上，「出資繳保費的要保人(A)」將自己的財產透過保險給付，<strong>贈與給受益人(C)</strong>。<br>
+                當死亡理賠撥款時，超過年度贈與免稅額度（現為 244 萬元）之部分，將被課徵<strong>贈與稅</strong>（10% ~ 20%）。
+            `;
+            suggestion.innerText = "建議將保單變更為「要保人與被保險人為同一人」（即要保人A ＝ 被保人A）。請注意中途變更要保人時，當下保價金若極高，亦可能被視為「贈與保單資產」，須做好額度控管。";
+        } 
+        else if (resultKey === 'scenario_4') {
+            resultBox.className = "result-box estate-tax";
+            badge.className = "badge bg-danger";
+            badge.innerText = "⚠️ 情境 4：要保人先亡，保價值金計入遺產";
+            title.innerText = "要保人先於被保人身故！保單價值準備金須列入要保人遺產。";
+            relation.innerHTML = "<strong>目前架構：</strong> 要保人(A) ≠ 被保險人(B)，要保人(A)先亡，被保險人(B)健在。";
+            details.innerHTML = `
+                此時被保險人仍存活，保單尚未理賠。<br>
+                然而，這張保單累積的「保單價值準備金（保價金）」是屬於「要保人(A)」名下的財產。<br>
+                財產所有人(A)身故，此金額必須<strong>併入要保人(A)的遺產總額</strong>申報遺產稅。
+            `;
+            suggestion.innerText = "繼承人申報遺產稅時必須取得「保單價值準備金證明書」依法申報，並於完稅後辦理「變更要保人」。建議規劃時儘量採「要保人 ＝ 被保險人」架構避免此困擾。";
+        }
+    }
+
+    function calculateRisk() {
+        const checkboxes = document.querySelectorAll('.risk-checkbox');
+        let checkedCount = 0;
+        let checkedItems = [];
+
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                checkedCount++;
+                checkedItems.push(cb.value);
+            }
+        });
+
+        const badgeBox = document.getElementById('risk-badge-box');
+        const descText = document.getElementById('risk-desc-text');
+
+        if (checkedCount === 0) {
+            badgeBox.className = "risk-level low";
+            badgeBox.innerText = `低風險 (0/8)`;
+            descText.innerHTML = "目前未勾選任何異常樣態，被依實質課稅原則課稅的機率極低。";
+        } else if (checkedCount <= 2) {
+            badgeBox.className = "risk-level medium";
+            badgeBox.innerText = `中度注意 (${checkedCount}/8)`;
+            descText.innerHTML = `您已勾選 <strong>${checkedCount}</strong> 個樣態（${checkedItems.join('、')}）。國稅局在查核時會採取「綜合性評估」。若投保時年齡偏高或近期罹患重病，即使指定了受益人，仍有被國稅局依實質課稅原則補徵遺產稅的潛在風險。`;
+        } else {
+            badgeBox.className = "risk-level high";
+            badgeBox.innerText = `高度警示 (${checkedCount}/8)`;
+            descText.innerHTML = `⚠️ <strong>高度風險！您已勾選 ${checkedCount} 個異常查核樣態（${checkedItems.join('、')}）。</strong>此類保單極度容易引發國稅局「實質課稅原則」查核，否定保單免稅特權並將其全額併入遺產計稅。建議立即尋求租稅專家重新規劃。`;
+        }
+    }
+
+    // 初始化精靈
+    resetWizard();
+</script>
+
+</body>
+</html>
