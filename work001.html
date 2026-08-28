@@ -11,7 +11,7 @@
         body { font-family: 'Noto Sans TC', sans-serif; }
         /* 自定義捲軸樣式 */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1e293b; rounded-xl; }
+        ::-webkit-scrollbar-track { background: #1e293b; border-radius: 8px; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
@@ -60,19 +60,19 @@
         <!-- 數據總對決 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-6 md:mb-8">
             <div class="bg-slate-800/80 p-5 md:p-6 rounded-2xl border border-slate-700 shadow-lg text-center">
-                <p class="text-sm text-slate-400 font-bold mb-1">【安全網】強制險累計幫您抵充</p>
+                <p class="text-sm text-slate-400 font-bold mb-1">【安全網】勞保給付累計幫您抵充</p>
                 <p class="text-3xl md:text-4xl font-extrabold text-blue-400" id="total_insurance_display">NT$ 3,610,800</p>
                 <span class="text-xs text-slate-500">（勞保/災保依法給付總額）</span>
             </div>
             <div class="bg-amber-950/20 p-5 md:p-6 rounded-2xl border border-amber-500/30 shadow-lg text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg" id="alert_badge">警報</div>
+                <div class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg" id="alert_badge" style="display: none;">警報</div>
                 <p class="text-sm text-amber-400 font-bold mb-1">【致命缺口】雇主需依法自負備用金</p>
                 <p class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-amber-400" id="total_employer_display">NT$ 3,149,200</p>
-                <span class="text-xs text-amber-500" id="employer_gap_desc">（勞保不給付之自負責任）</span>
+                <span class="text-xs text-amber-500">（勞保不給付之自負責任）</span>
             </div>
         </div>
 
-        <!-- 核心對照表 (上：雇主自負 / 下：強制險) -->
+        <!-- 核心對照表 -->
         <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl mb-6">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[700px]">
@@ -87,10 +87,10 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-700 text-sm">
-                        <!-- 超出強制險（雇主責任） -->
+                        <!-- 雇主自負 -->
                         <tr class="bg-amber-950/30 hover:bg-amber-950/40 transition-colors">
                             <td class="p-4 font-bold text-amber-400">
-                                超出強制險<br>
+                                超出部分<br>
                                 <span class="text-xs font-normal text-amber-500/80">(雇主自負金額)</span>
                             </td>
                             <td class="p-4 text-amber-300 font-medium">
@@ -102,10 +102,10 @@
                             <td class="p-4 text-amber-400 font-bold text-base" id="gap_disability">NT$ 630,000</td>
                             <td class="p-4 text-amber-400 font-bold text-base" id="gap_death">NT$ 472,500</td>
                         </tr>
-                        <!-- 職災強制險部分 -->
+                        <!-- 勞保給付 -->
                         <tr class="bg-slate-800 hover:bg-slate-750 transition-colors">
                             <td class="p-4 font-bold text-blue-400">
-                                強制險部分<br>
+                                勞保給付<br>
                                 <span class="text-xs font-normal text-slate-400">(災保抵充金額)</span>
                             </td>
                             <td class="p-4 text-slate-300">健保給付範圍內</td>
@@ -120,9 +120,9 @@
         </div>
 
         <!-- 警示金句 -->
-        <div class="bg-red-950/40 border border-red-900/60 p-4 md:p-5 rounded-2xl text-center mb-8" id="warning_container">
-            <p class="text-red-400 font-bold text-sm md:text-base" id="warning_text">
-                ⚠️ 警語：<span id="warning_prefix">高薪低報看似每月省下些微保費，</span>一旦發生重大職災，上方黃色區塊的 <span id="warning_total" class="underline font-extrabold text-lg">315 萬</span> 法律補償責任，雇主必須全數吞下！
+        <div class="bg-red-950/40 border border-red-900/60 p-4 md:p-5 rounded-2xl text-center mb-8">
+            <p class="text-red-400 font-bold text-sm md:text-base">
+                ⚠️ 警語：一旦發生重大職災，上方黃色區塊的 <span id="warning_total" class="underline font-extrabold text-lg">315 萬</span> 法律補償責任，雇主必須全數吞下！
             </p>
         </div>
 
@@ -367,14 +367,11 @@
             document.getElementById('salary_gap').innerText = formatCurrency(gap) + ' / 月';
             
             // 動態更新文字
-            const warningPrefix = document.getElementById('warning_prefix');
             const alertBadge = document.getElementById('alert_badge');
             
             if (isUnderReporting) {
-                warningPrefix.style.display = 'inline';
                 alertBadge.style.display = 'block';
             } else {
-                warningPrefix.style.display = 'none';
                 alertBadge.style.display = 'none';
             }
 
