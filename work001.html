@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>職災補償對照表</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen py-10 px-4">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- 頁首標題 -->
+        <div class="text-center mb-8 md:mb-10">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-amber-400 mb-2 leading-snug">實領與勞保薪資職災補償對照表</h1>
+            <p class="text-sm md:text-base text-slate-400">輸入實領與投保金額，一秒試算雇主潛在的百萬級資金缺口</p>
+        </div>
+
+        <!-- 參數輸入區 -->
+        <div class="bg-slate-800 p-5 md:p-6 rounded-2xl border border-slate-700 shadow-xl mb-6 md:mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">1. 實領薪資 (月薪)</label>
+                <div class="relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="text-slate-500 sm:text-sm">NT$</span>
+                    </div>
+                    <input type="number" id="actual_salary" value="40000" class="block w-full pl-12 pr-4 py-3 bg-slate-100 border border-slate-600 rounded-xl text-black font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-lg">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">2. 勞保薪資</label>
+                <div class="relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="text-slate-500 sm:text-sm">NT$</span>
+                    </div>
+                    <input type="number" id="insured_salary" value="29500" class="block w-full pl-12 pr-4 py-3 bg-slate-100 border border-slate-600 rounded-xl text-black font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-lg">
+                </div>
+            </div>
+            <div class="bg-amber-950/40 p-4 rounded-xl border border-amber-900/50 flex flex-col justify-center sm:col-span-2 md:col-span-1">
+                <span class="text-xs text-amber-400 font-semibold tracking-wider uppercase">申報差額</span>
+                <span class="text-xl md:text-2xl font-extrabold text-amber-400 mt-1" id="salary_gap">NT$ 10,500 / 月</span>
+            </div>
+        </div>
+
+        <!-- 數據總對決 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-6 md:mb-8">
+            <div class="bg-slate-800/80 p-5 md:p-6 rounded-2xl border border-slate-700 shadow-lg text-center">
+                <p class="text-sm text-slate-400 font-bold mb-1">【安全網】強制險累計幫您抵充</p>
+                <p class="text-3xl md:text-4xl font-extrabold text-blue-400" id="total_insurance_display">NT$ 3,610,800</p>
+                <span class="text-xs text-slate-500">（勞保/災保依法給付總額）</span>
+            </div>
+            <div class="bg-amber-950/20 p-5 md:p-6 rounded-2xl border border-amber-500/30 shadow-lg text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg" id="alert_badge">警報</div>
+                <p class="text-sm text-amber-400 font-bold mb-1">【致命缺口】雇主需依法自負備用金</p>
+                <p class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-amber-400" id="total_employer_display">NT$ 3,149,200</p>
+                <span class="text-xs text-amber-500" id="employer_gap_desc">（勞保不給付之自負責任）</span>
+            </div>
+        </div>
+
+        <!-- 核心對照表 (上：雇主自負 / 下：強制險) -->
+        <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl mb-6">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="bg-slate-700 text-slate-200">
+                            <th class="p-4 text-sm font-bold min-w-[120px]">保障歸屬</th>
+                            <th class="p-4 text-sm font-bold">醫療費用</th>
+                            <th class="p-4 text-sm font-bold">傷病補償 (2年期)</th>
+                            <th class="p-4 text-sm font-bold">薪資終結 (40M)</th>
+                            <th class="p-4 text-sm font-bold">重度失能 (最高60M)</th>
+                            <th class="p-4 text-sm font-bold">身故/喪葬 (45M)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-700 text-sm">
+                        <!-- 上面：超出強制險（雇主責任） -->
+                        <tr class="bg-amber-950/30 hover:bg-amber-950/40 transition-colors">
+                            <td class="p-4 font-bold text-amber-400">
+                                超出強制險<br>
+                                <span class="text-xs font-normal text-amber-500/80">(雇主自負金額)</span>
+                            </td>
+                            <td class="p-4 text-amber-300 font-medium">
+                                健保自費項目<br>
+                                <span class="text-xs text-amber-500">(無上限、全額負擔)</span>
+                            </td>
+                            <td class="p-4 text-amber-400 font-bold text-base" id="gap_injury">NT$ 446,700</td>
+                            <td class="p-4 text-amber-400 font-bold text-base" id="gap_term">NT$ 1,600,000</td>
+                            <td class="p-4 text-amber-400 font-bold text-base" id="gap_disability">NT$ 630,000</td>
+                            <td class="p-4 text-amber-400 font-bold text-base" id="gap_death">NT$ 472,500</td>
+                        </tr>
+                        <!-- 下面：職災強制險部分 -->
+                        <tr class="bg-slate-800 hover:bg-slate-750 transition-colors">
+                            <td class="p-4 font-bold text-blue-400">
+                                強制險部分<br>
+                                <span class="text-xs font-normal text-slate-400">(災保抵充金額)</span>
+                            </td>
+                            <td class="p-4 text-slate-300">健保給付範圍內</td>
+                            <td class="p-4 text-blue-300 font-bold text-base" id="ins_injury">NT$ 513,300</td>
+                            <td class="p-4 text-slate-500 font-bold text-base" id="ins_term">NT$ 0</td>
+                            <td class="p-4 text-blue-300 font-bold text-base" id="ins_disability">NT$ 1,770,000</td>
+                            <td class="p-4 text-blue-300 font-bold text-base" id="ins_death">NT$ 1,327,500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 警示金句 -->
+        <div class="bg-red-950/40 border border-red-900/60 p-4 md:p-5 rounded-2xl text-center" id="warning_container">
+            <p class="text-red-400 font-bold text-sm md:text-base" id="warning_text">
+                ⚠️ 警語：<span id="warning_prefix">高薪低報看似每月省下些微保費，</span>一旦發生重大職災，上方黃色區塊的 <span id="warning_total" class="underline font-extrabold text-lg">315 萬</span> 法律補償責任，雇主必須全數吞下！
+            </p>
+        </div>
+    </div>
+
+    <!-- 運算邏輯 JavaScript -->
+    <script>
+        // 定義 DOM 元素，修復 ReferenceError
+        const actInput = document.getElementById('actual_salary');
+        const insInput = document.getElementById('insured_salary');
+
+        function formatCurrency(val) {
+            return 'NT$ ' + Math.round(val).toLocaleString();
+        }
+
+        function calculate() {
+            const act = parseFloat(actInput.value) || 0;
+            const ins = parseFloat(insInput.value) || 0;
+            const gap = Math.max(0, act - ins);
+            
+            // 判斷是否為高薪低報
+            const isUnderReporting = act > ins;
+
+            // 更新月薪差額顯示
+            document.getElementById('salary_gap').innerText = formatCurrency(gap) + ' / 月';
+            
+            // 動態更新文字
+            const warningPrefix = document.getElementById('warning_prefix');
+            const alertBadge = document.getElementById('alert_badge');
+            
+            if (isUnderReporting) {
+                warningPrefix.style.display = 'inline';
+                alertBadge.style.display = 'block';
+            } else {
+                warningPrefix.style.display = 'none';
+                alertBadge.style.display = 'none';
+            }
+
+            // 1. 傷病給付 24M (前2個月 100%, 後22個月 70%)
+            const ins_injury_val = (ins * 2 * 1) + (ins * 22 * 0.7);
+            const act_injury_total = act * 24;
+            const gap_injury_val = Math.max(0, act_injury_total - ins_injury_val);
+
+            // 2. 薪資終結 40M (勞保不賠)
+            const ins_term_val = 0;
+            const gap_term_val = act * 40;
+
+            // 3. 失能給付 (按最高60個月)
+            const ins_disability_val = ins * 60;
+            const gap_disability_val = gap * 60;
+
+            // 4. 身故給付 (45個月)
+            const ins_death_val = ins * 45;
+            const gap_death_val = gap * 45;
+
+            // 5. 總計 (累計最壞情況風險)
+            const total_ins = ins_injury_val + ins_term_val + ins_disability_val + ins_death_val;
+            const total_gap = gap_injury_val + gap_term_val + gap_disability_val + gap_death_val;
+
+            // 渲染至網頁 DOM
+            document.getElementById('ins_injury').innerText = formatCurrency(ins_injury_val);
+            document.getElementById('gap_injury').innerText = formatCurrency(gap_injury_val);
+
+            document.getElementById('ins_term').innerText = formatCurrency(ins_term_val);
+            document.getElementById('gap_term').innerText = formatCurrency(gap_term_val);
+
+            document.getElementById('ins_disability').innerText = formatCurrency(ins_disability_val);
+            document.getElementById('gap_disability').innerText = formatCurrency(gap_disability_val);
+
+            document.getElementById('ins_death').innerText = formatCurrency(ins_death_val);
+            document.getElementById('gap_death').innerText = formatCurrency(gap_death_val);
+
+            // 渲染總和
+            document.getElementById('total_insurance_display').innerText = formatCurrency(total_ins);
+            document.getElementById('total_employer_display').innerText = formatCurrency(total_gap);
+            document.getElementById('warning_total').innerText = formatCurrency(total_gap);
+        }
+
+        // 綁定輸入事件，即時運算
+        actInput.addEventListener('input', calculate);
+        insInput.addEventListener('input', calculate);
+
+        // 首次載入執行一次
+        calculate();
+    </script>
+</body>
+</html>
