@@ -444,7 +444,6 @@
     <!-- 加入 LINE 按鈕 (簡潔版) -->
     <a href="https://lin.ee/udQp9wm" target="_blank" class="line-icon-btn" title="加入LINE好友">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <!-- 這裡使用一個更接近官方風格且沒有內建英文字的純淨對話泡泡 SVG -->
             <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.122.303.039.782-.039 1.127l-.271 1.636c-.078.432-.375 1.832 1.618.995 1.991-.837 10.744-6.331 11.6-14.22z"/>
         </svg>
     </a>
@@ -505,7 +504,7 @@
                     </div>
                     <ul class="bullet-list">
                         <li><strong>稅務判定：</strong>原則上<strong>免計入被保險人遺產總額</strong>。</li>
-                        <li><strong>注意事項：</strong>當受益人領取之保險金每戶全年合計<strong>超過 3,740 萬元</strong>時，超過部分需計入「基本所得額」課徵最低稅負制。</li>
+                        <li><strong>注意事項：</strong>受益人領取之身故給付金，每申報戶全年合計<strong>超過 3,740 萬元</strong>之部分，須計入受益人的「基本所得額」，與其當年度的其他所得（如綜合所得淨額等）合併計算最低稅負。</li>
                     </ul>
                 </div>
 
@@ -554,6 +553,50 @@
                     </ul>
                 </div>
             </div>
+
+            <!-- 新增：身故各項基本免稅額度說明 -->
+            <div style="margin-top: 30px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 30px;">
+                <h3 style="font-size: 32px; color: var(--primary); margin-bottom: 20px; border-bottom: 2px solid #cbd5e1; padding-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                    💰 身故各項基本免稅額度說明 (遺產稅)
+                </h3>
+                <ul class="bullet-list" style="margin-left: 30px; font-size: 27px; line-height: 1.6;">
+                    <li><strong>免稅額：</strong> 1,333 萬元。</li>
+                    <li><strong>常見扣除額 (可疊加)：</strong>
+                        <ul style="margin-top: 10px; margin-bottom: 20px; list-style-type: circle; margin-left: 30px; color: var(--text-muted);">
+                            <li>配偶扣除額：553 萬元。</li>
+                            <li>直系血親卑親屬 (子女) 扣除額：每人 56 萬元。</li>
+                            <li>父母扣除額：每人 138 萬元。</li>
+                            <li>喪葬費扣除額：固定 138 萬元。</li>
+                        </ul>
+                    </li>
+                    <li><strong style="color: var(--danger);">💡 案例試算：</strong> 若客戶無配偶、有 3 個已成年子女。其遺產免稅總額為：<br> 
+                    免稅額 1,333萬 + 子女扣除 (56萬 × 3) + 喪葬費 138萬 = <strong style="color: var(--danger); font-size: 30px;">1,639 萬元</strong>。<br>
+                    <span style="color: var(--text-muted); font-size: 22px;">(註：只要留下的房地產[依公告現值計算]與存款總額低於 1,639 萬，遺產稅即為 0 元)</span></li>
+                </ul>
+            </div>
+
+            <!-- 新增：最低稅負制說明 -->
+            <div style="margin-top: 25px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 30px;">
+                <h3 style="font-size: 32px; color: #15803d; margin-bottom: 20px; border-bottom: 2px solid #bbf7d0; padding-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                    🛡️ 最低稅負制說明 (身故保險金專屬)
+                </h3>
+                <ul class="bullet-list" style="margin-left: 30px; font-size: 27px; line-height: 1.6;">
+                    <li><strong>適用前提：</strong> 常規保單 (要保人＝被保險人)，且有指定受益人。這筆錢<strong>完全免徵遺產稅 (無上限)</strong>。</li>
+                    <li><strong>免稅額度：</strong> 每一個「申報戶」全年領取之保險給付，合計有 <strong style="color: #15803d; font-size: 30px;">3,740 萬元</strong> 的免稅額度。</li>
+                    <li style="margin-top: 15px;"><strong>超過 3,740 萬會被課 40% 的重稅嗎？</strong> 
+                        <br><strong style="color: var(--danger);">❌ 絕對不是！</strong> 保險金「不計入」一般綜合所得稅，而是走「最低稅負制」系統，稅率固定為 <strong>20%</strong>。
+                    </li>
+                    <li style="margin-top: 15px;"><strong style="color: #15803d;">💡 實際試算 (以單一申報戶領取 5,000 萬保險金為例)：</strong>
+                        <ol style="margin-top: 10px; margin-bottom: 10px; margin-left: 30px; color: var(--text-dark);">
+                            <li>先扣保險免稅額：5,000萬 － 3,740萬 = <strong>1,260萬</strong> (此金額計入基本所得額)</li>
+                            <li>再扣最低稅負基本免稅額：1,260萬 － 750萬 (每戶基本額度) = <strong>510萬</strong></li>
+                            <li>計算稅金：510萬 × 20% = <strong style="color: var(--danger); font-size: 30px;">102 萬元</strong></li>
+                        </ol>
+                        <span style="color: var(--text-muted); font-size: 22px;">結論：領取 5,000 萬理賠，實質繳稅僅 102 萬 (實質稅率約 2%)，保單的稅務優勢極大！</span>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </section>
 
@@ -769,7 +812,7 @@
             details.innerHTML = `
                 依《保險法》第112條及《遺產及贈與稅法》第16條第9款規定，保險金<strong>不計入遺產總額</strong>。<br>
                 <strong>⚠️ 潛在所得稅風險（最低稅負制）：</strong><br>
-                受益人領取之身故給付金，每申報戶全年合計<strong>超過 3,740 萬元</strong>的部分，需併入「基本所得額」課徵最低稅負制。
+                受益人領取之身故給付金，每申報戶全年合計<strong>超過 3,740 萬元</strong>之部分，須計入受益人的「基本所得額」，與其當年度的其他所得（如綜合所得淨額等）合併計算最低稅負。
             `;
             suggestion.innerText = "此為最合規合理的傳承配置。若保險金很高，建議可透過「複數受益人拆分」或「分批、多保單分散受益人」來降低所得基本稅額衝擊。";
         } 
