@@ -49,6 +49,11 @@
         .bg-pink-cell { background-color: #fce7f3; } /* Tailwind pink-100 */
         .bg-white-cell { background-color: #ffffff; }
 
+        /* 新增虛線分隔線樣式 */
+        .border-dashed-left {
+            border-left: 2px dashed #64748b !important;
+        }
+
         /* 垂直文字設定 (左至右兩行排列) */
         .col-vert-2lines {
             writing-mode: vertical-lr; 
@@ -201,10 +206,10 @@
                     <tr>
                       <th></th>
                       <th>醫療<br>費用<br>補償</th>
-                      <th colspan="3">職災醫療期間<br><u class="underline-offset-4 decoration-2">原領工資</u>補償</th>
-                      <th>醫療期間<br>屆滿兩年<br>未痊癒</th>
-                      <th colspan="3">職災失能補償<br>(平均月投保薪資)</th>
-                      <th>職災<br>死亡補償</th>
+                      <th colspan="3">醫療期間<br><u class="underline-offset-4 decoration-2">原領工資</u>補償</th>
+                      <th class="border-dashed-left">醫療期間<br>屆滿2年<br>未痊癒</th>
+                      <th colspan="3">失能補償<br>15級 221項<br>(平均月投保薪資)</th>
+                      <th>死亡補償</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -222,7 +227,7 @@
                       <td rowspan="3" class="bg-yellow-cell">第<br>1~3<br>天<br>工<br>資<br>補<br>償</td>
                       <td rowspan="2" class="bg-blue-cell">一<br>個<br>月<br><br>100%</td>
                       <td class="bg-blue-cell">二<br>年<br><br>70%</td>
-                      <td rowspan="3" class="bg-yellow-cell">
+                      <td rowspan="3" class="bg-yellow-cell border-dashed-left">
                         <div class="flex-vert-lr">
                           <div>喪失原有工作能力，不含失能給付</div>
                           <div>標準，雇主得一次付【<span style="color: #1e3a8a;">四十個月</span>】</div>
