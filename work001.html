@@ -4,20 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>職災補償對照表</title>
-    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; }
-        /* 自定義捲軸樣式 */
+        
+        /* 自定義捲軸樣式 - 淺色版 */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1e293b; border-radius: 8px; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .summary-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+        .summary-table {
+            width: 100%;
+            min-width: 900px; /* 確保在手機上不會過度擠壓文字 */
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 3px solid #1e293b;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #334155;
+            background-color: white;
+        }
+        .summary-table th, .summary-table td {
+            border: 1px solid #64748b;
+            text-align: center;
+            vertical-align: middle;
+            padding: 10px;
+            line-height: 1.4;
+        }
+        .summary-table th {
+            background-color: #e2e8f0;
+            color: #0f172a;
+        }
+        
+        /* 定義背景顏色 (使用柔和的淺色調以符合整體設計) */
+        .bg-blue-cell { background-color: #e0f2fe; } /* Tailwind sky-100 */
+        .bg-yellow-cell { background-color: #fef9c3; } /* Tailwind yellow-100 */
+        .bg-pink-cell { background-color: #fce7f3; } /* Tailwind pink-100 */
+        .bg-white-cell { background-color: #ffffff; }
+
+        /* 垂直文字設定 (左至右兩行排列) */
+        .col-vert-2lines {
+            writing-mode: vertical-lr; 
+            margin: 0 auto;
+            letter-spacing: 2px;
+            line-height: 1.6;
+        }
+        
+        /* 垂直文字設定 (中間多欄左至右排列) */
+        .flex-vert-lr {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .flex-vert-lr > div {
+            writing-mode: vertical-rl;
+            letter-spacing: 1px;
+        }
+
+        /* 底部圖例標示設定 */
+        .summary-legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #475569;
+            margin-top: 15px;
+        }
+        .summary-legend .box {
+            display: inline-block;
+            width: 30px;
+            height: 15px;
+            border: 1px solid #64748b;
+            vertical-align: middle;
+            margin: 0 5px;
+            border-radius: 2px;
+        }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen py-10 px-4">
+<body class="bg-slate-50 text-slate-800 min-h-screen py-10 px-4">
 
+    <!-- LINE 懸浮按鈕 (無文字，純圖示) -->
     <a href="https://lin.ee/udQp9wm" target="_blank" rel="noopener noreferrer" class="fixed top-4 right-4 md:top-6 md:right-6 z-40 w-12 h-12 md:w-14 md:h-14 bg-[#06C755] hover:bg-[#05b34c] rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl hover:scale-110 transition-all duration-300 group">
         <svg viewBox="0 0 24 24" fill="white" class="w-7 h-7 md:w-8 md:h-8 drop-shadow-sm group-hover:drop-shadow-md" xmlns="http://www.w3.org/2000/svg">
             <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.121.303.079.778.039 1.085l-.171 1.027c-.053.303-.242 1.186 1.039.647 1.281-.54 6.911-4.069 9.428-6.967 1.739-1.907 2.572-3.843 2.572-5.992z"/>
@@ -25,314 +101,365 @@
     </a>
 
     <div class="max-w-5xl mx-auto">
-        <!-- 頁首標題 -->
         <div class="text-center mb-8 md:mb-10">
-            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-amber-400 mb-2 leading-snug">勞保薪資職災補償對照表</h1>
-            <p class="text-sm md:text-base text-slate-400">依據勞基法59條試算雇主潛在補償缺口</p>
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-black text-slate-800 mb-3 leading-snug tracking-tight">實領與勞保薪資職災補償對照表</h1>
+            <p class="text-sm md:text-base text-slate-500 font-medium">依據勞基法59條試算雇主潛在補償缺口</p>
         </div>
 
-        <!-- 參數輸入區 -->
-        <div class="bg-slate-800 p-5 md:p-6 rounded-2xl border border-slate-700 shadow-xl mb-6 md:mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
+        <div class="bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 mb-6 md:mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
             <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">1. 實領薪資 (月薪)</label>
-                <div class="relative rounded-md shadow-sm">
+                <label class="block text-sm font-bold text-slate-600 mb-2">1. 實領薪資 (月薪)</label>
+                <div class="relative rounded-xl shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="text-slate-500 sm:text-sm">NT$</span>
+                        <span class="text-slate-400 font-medium sm:text-sm">NT$</span>
                     </div>
-                    <input type="number" id="actual_salary" value="40000" class="block w-full pl-12 pr-4 py-3 bg-slate-100 border border-slate-600 rounded-xl text-black font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-lg">
+                    <input type="number" id="actual_salary" value="40000" class="block w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-black focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg transition-colors">
                 </div>
             </div>
             <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">2. 勞保薪資</label>
-                <div class="relative rounded-md shadow-sm">
+                <label class="block text-sm font-bold text-slate-600 mb-2">2. 勞保薪資</label>
+                <div class="relative rounded-xl shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="text-slate-500 sm:text-sm">NT$</span>
+                        <span class="text-slate-400 font-medium sm:text-sm">NT$</span>
                     </div>
-                    <input type="number" id="insured_salary" value="29500" class="block w-full pl-12 pr-4 py-3 bg-slate-100 border border-slate-600 rounded-xl text-black font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-lg">
+                    <input type="number" id="insured_salary" value="29500" class="block w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-black focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-lg transition-colors">
                 </div>
             </div>
-            <div class="bg-amber-950/40 p-4 rounded-xl border border-amber-900/50 flex flex-col justify-center sm:col-span-2 md:col-span-1">
-                <span class="text-xs text-amber-400 font-semibold tracking-wider uppercase">申報差額</span>
-                <span class="text-xl md:text-2xl font-extrabold text-amber-400 mt-1" id="salary_gap">NT$ 10,500 / 月</span>
+            <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 flex flex-col justify-center sm:col-span-2 md:col-span-1 shadow-inner">
+                <span class="text-xs text-amber-700 font-bold tracking-wider uppercase">申報差額</span>
+                <span class="text-xl md:text-2xl font-black text-amber-600 mt-1" id="salary_gap">NT$ 10,500 / 月</span>
             </div>
         </div>
 
-        <!-- 數據總對決 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-6 md:mb-8">
-            <div class="bg-slate-800/80 p-5 md:p-6 rounded-2xl border border-slate-700 shadow-lg text-center">
-                <p class="text-sm text-slate-400 font-bold mb-1">【安全網】勞保給付累計幫您抵充</p>
-                <p class="text-3xl md:text-4xl font-extrabold text-blue-400" id="total_insurance_display">NT$ 3,610,800</p>
-                <span class="text-xs text-slate-500">（勞保/災保依法給付總額）</span>
+            <div class="bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-lg text-center flex flex-col justify-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+                <p class="text-sm text-slate-500 font-bold mb-2">【安全網】勞保給付累計幫您抵充</p>
+                <p class="text-3xl md:text-4xl font-black text-blue-600 tracking-tight" id="total_insurance_display">NT$ 3,610,800</p>
+                <span class="text-xs text-slate-400 mt-2 font-medium">（勞保/災保依法給付總額）</span>
             </div>
-            <div class="bg-amber-950/20 p-5 md:p-6 rounded-2xl border border-amber-500/30 shadow-lg text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg" id="alert_badge" style="display: none;">警報</div>
-                <p class="text-sm text-amber-400 font-bold mb-1">【致命缺口】雇主需依法自負備用金</p>
-                <p class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-amber-400" id="total_employer_display">NT$ 3,149,200</p>
-                <span class="text-xs text-amber-500">（勞保不給付之自負責任）</span>
+            <div class="bg-amber-50 p-5 md:p-6 rounded-2xl border border-amber-300 shadow-lg text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-red-500"></div>
+                <div class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg shadow-sm" id="alert_badge" style="display: none;">警報</div>
+                <p class="text-sm text-amber-700 font-bold mb-2">【致命缺口】雇主需依法自負備用金</p>
+                <p class="text-3xl md:text-4xl font-black text-red-600 tracking-tight drop-shadow-sm" id="total_employer_display">NT$ 3,149,200</p>
+                <span class="text-xs text-amber-600 mt-2 font-medium">（勞保不給付之自負責任）</span>
             </div>
         </div>
 
-        <!-- 核心對照表 -->
-        <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl mb-6">
+        <div class="bg-white rounded-2xl border border-slate-300 overflow-hidden shadow-xl mb-10">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[700px]">
                     <thead>
-                        <tr class="bg-slate-700 text-slate-200">
-                            <th class="p-4 text-sm font-bold min-w-[120px]">保障歸屬</th>
-                            <th class="p-4 text-sm font-bold">醫療費用</th>
-                            <th class="p-4 text-sm font-bold">傷病補償 (2年期)</th>
-                            <th class="p-4 text-sm font-bold">薪資終結 (40M)</th>
-                            <th class="p-4 text-sm font-bold">重度失能 (最高60M)</th>
-                            <th class="p-4 text-sm font-bold">身故/喪葬 (45M)</th>
+                        <tr class="bg-slate-100 text-slate-700 border-b border-slate-300">
+                            <th class="p-4 text-sm font-black min-w-[120px]">保障歸屬</th>
+                            <th class="p-4 text-sm font-black">醫療費用</th>
+                            <th class="p-4 text-sm font-black">傷病補償 (2年期)</th>
+                            <th class="p-4 text-sm font-black">薪資終結 (40M)</th>
+                            <th class="p-4 text-sm font-black">重度失能 (最高60M)</th>
+                            <th class="p-4 text-sm font-black">身故/喪葬 (45M)</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-700 text-sm">
-                        <!-- 雇主自負 -->
-                        <tr class="bg-amber-950/30 hover:bg-amber-950/40 transition-colors">
-                            <td class="p-4 font-bold text-amber-400">
+                    <tbody class="divide-y divide-slate-200 text-sm">
+                        <!-- 超出部分（雇主責任） -->
+                        <tr class="bg-amber-50/50 hover:bg-amber-100/50 transition-colors">
+                            <td class="p-4 font-black text-amber-700 border-r border-slate-200">
                                 超出部分<br>
-                                <span class="text-xs font-normal text-amber-500/80">(雇主自負金額)</span>
+                                <span class="text-xs font-semibold text-amber-600/80">(雇主自負金額)</span>
                             </td>
-                            <td class="p-4 text-amber-300 font-medium">
+                            <td class="p-4 text-amber-700 font-bold">
                                 健保自費項目<br>
-                                <span class="text-xs text-amber-500">(無上限、全額負擔)</span>
+                                <span class="text-xs text-amber-600/80">(無上限、全額負擔)</span>
                             </td>
-                            <td class="p-4 text-amber-400 font-bold text-base" id="gap_injury">NT$ 446,700</td>
-                            <td class="p-4 text-amber-400 font-bold text-base" id="gap_term">NT$ 1,600,000</td>
-                            <td class="p-4 text-amber-400 font-bold text-base" id="gap_disability">NT$ 630,000</td>
-                            <td class="p-4 text-amber-400 font-bold text-base" id="gap_death">NT$ 472,500</td>
+                            <td class="p-4 text-red-600 font-black text-base" id="gap_injury">NT$ 446,700</td>
+                            <td class="p-4 text-red-600 font-black text-base" id="gap_term">NT$ 1,600,000</td>
+                            <td class="p-4 text-red-600 font-black text-base" id="gap_disability">NT$ 630,000</td>
+                            <td class="p-4 text-red-600 font-black text-base" id="gap_death">NT$ 472,500</td>
                         </tr>
                         <!-- 勞保給付 -->
-                        <tr class="bg-slate-800 hover:bg-slate-750 transition-colors">
-                            <td class="p-4 font-bold text-blue-400">
+                        <tr class="bg-white hover:bg-slate-50 transition-colors">
+                            <td class="p-4 font-black text-blue-600 border-r border-slate-200">
                                 勞保給付<br>
-                                <span class="text-xs font-normal text-slate-400">(災保抵充金額)</span>
+                                <span class="text-xs font-semibold text-slate-500">(災保抵充金額)</span>
                             </td>
-                            <td class="p-4 text-slate-300">健保給付範圍內</td>
-                            <td class="p-4 text-blue-300 font-bold text-base" id="ins_injury">NT$ 513,300</td>
-                            <td class="p-4 text-slate-500 font-bold text-base" id="ins_term">NT$ 0</td>
-                            <td class="p-4 text-blue-300 font-bold text-base" id="ins_disability">NT$ 1,770,000</td>
-                            <td class="p-4 text-blue-300 font-bold text-base" id="ins_death">NT$ 1,327,500</td>
+                            <td class="p-4 text-slate-600 font-medium">健保給付範圍內</td>
+                            <td class="p-4 text-blue-600 font-bold text-base" id="ins_injury">NT$ 513,300</td>
+                            <td class="p-4 text-slate-400 font-bold text-base" id="ins_term">NT$ 0</td>
+                            <td class="p-4 text-blue-600 font-bold text-base" id="ins_disability">NT$ 1,770,000</td>
+                            <td class="p-4 text-blue-600 font-bold text-base" id="ins_death">NT$ 1,327,500</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 警示金句 -->
-        <div class="bg-red-950/40 border border-red-900/60 p-4 md:p-5 rounded-2xl text-center mb-8">
-            <p class="text-red-400 font-bold text-sm md:text-base">
-                ⚠️ 警語：一旦發生重大職災，上方黃色區塊的 <span id="warning_total" class="underline font-extrabold text-lg">315 萬</span> 法律補償責任，雇主必須全數吞下！
+        <div class="mb-6">
+            <h2 class="text-xl md:text-2xl font-black text-slate-800 text-center mb-4 tracking-widest">【職業災害員工補償】彙整</h2>
+            <div class="summary-table-wrapper rounded-xl shadow-lg border border-slate-300 bg-white p-2 md:p-4">
+                <table class="summary-table">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>醫療<br>費用<br>補償</th>
+                      <th colspan="3">職災醫療期間<br><u class="underline-offset-4 decoration-2">原領工資</u>補償</th>
+                      <th>醫療期間<br>屆滿兩年<br>未痊癒</th>
+                      <th colspan="3">職災失能補償<br>(平均月投保薪資)</th>
+                      <th>職災<br>死亡補償</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- 第一主要列 (投保級距) -->
+                    <tr>
+                      <td rowspan="2" class="bg-white-cell">
+                        <span style="color: #1e3a8a;">投保</span><br><span style="color: #0f172a;">級距</span>
+                      </td>
+                      <td rowspan="3" class="bg-yellow-cell">
+                        <div class="col-vert-2lines">
+                          <div>勞工受傷或罹患職業病時，</div>
+                          <div style="color: #0f172a;">雇主應補償其<span style="color: #1e3a8a;">必需之醫療費用</span>。</div>
+                        </div>
+                      </td>
+                      <td rowspan="3" class="bg-yellow-cell">第<br>1~3<br>天<br>工<br>資<br>補<br>償</td>
+                      <td rowspan="2" class="bg-blue-cell">一<br>個<br>月<br><br>100%</td>
+                      <td class="bg-blue-cell">二<br>年<br><br>70%</td>
+                      <td rowspan="3" class="bg-yellow-cell">
+                        <div class="flex-vert-lr">
+                          <div>喪失原有工作能力，不含失能給付</div>
+                          <div>標準，雇主得一次付【<span style="color: #1e3a8a;">四十個月</span>】</div>
+                          <div>平均工資，免除『<span style="color: #1e3a8a;">工資補償責任</span>』。</div>
+                        </div>
+                      </td>
+                      <td class="bg-blue-cell">部分<br>失能<br><br>20%</td>
+                      <td class="bg-blue-cell">嚴重<br>失能<br><br>50%</td>
+                      <td class="bg-blue-cell">完全<br>失能<br><br>70%</td>
+                      <td rowspan="2" class="bg-blue-cell">40 個月<br>死亡補償<br>+<br>5 個月<br>喪葬費</td>
+                    </tr>
+                    <!-- 第二主要列 (合併與第二年30%區塊) -->
+                    <tr>
+                      <td class="bg-yellow-cell">二<br>年<br><br>30%</td>
+                      <td colspan="3" class="bg-blue-cell">1.5~60 個月</td>
+                    </tr>
+                    <!-- 第三主要列 (未投保級距差額) -->
+                    <tr>
+                      <td class="bg-pink-cell">
+                        <span style="color: #dc2626;">未投保</span><br><span style="color: #0f172a;">級距</span>
+                      </td>
+                      <td colspan="2" class="bg-pink-cell">投保級距<br>差額補償</td>
+                      <td colspan="3" class="bg-pink-cell">失能理賠<br>差額補償</td>
+                      <td class="bg-pink-cell">45 個月<br>差額補償</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- 底部圖例 -->
+                <div class="summary-legend">
+                  <div>◆勞保理賠負擔：<span class="box bg-blue-cell"></span></div>
+                  <div>◆企業主自行負擔：<span class="box bg-yellow-cell"></span> + <span class="box bg-pink-cell"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-red-50 border-l-4 border-red-500 p-5 rounded-r-2xl shadow-md text-center md:text-left mb-8 flex items-center justify-center md:justify-start">
+            <p class="text-red-700 font-bold text-base md:text-lg">
+                <span class="text-xl mr-1">⚠️</span> 警語：一旦發生重大職災，上方黃色區塊的 <span id="warning_total" class="underline decoration-red-400 decoration-4 underline-offset-4 font-black text-xl md:text-2xl mx-1 text-red-600">315 萬</span> 法律補償責任，雇主必須全數吞下！
             </p>
         </div>
 
-        <!-- 底部按鈕區 -->
-        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 border-t border-slate-700 pt-8 pb-4">
-            <button onclick="toggleLawModal()" class="w-full sm:w-auto px-6 py-2.5 bg-slate-700/80 hover:bg-slate-600 text-slate-200 text-sm md:text-base rounded-xl transition-all border border-slate-600 shadow-md hover:shadow-lg inline-flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
+            <button onclick="toggleLawModal()" class="w-full sm:w-auto px-8 py-3.5 bg-slate-800 hover:bg-slate-700 text-white text-base md:text-lg font-bold rounded-xl transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5 inline-flex items-center justify-center group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-amber-400 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
                 勞基法第 59 條
             </button>
-            <button onclick="toggleCivilLawModal()" class="w-full sm:w-auto px-6 py-2.5 bg-red-900/60 hover:bg-red-800/80 text-white text-sm md:text-base rounded-xl transition-all border border-red-700 shadow-md hover:shadow-lg inline-flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
+            <button onclick="toggleCivilLawModal()" class="w-full sm:w-auto px-8 py-3.5 bg-red-600 hover:bg-red-700 text-white text-base md:text-lg font-bold rounded-xl transition-all shadow-md hover:shadow-xl hover:-translate-y-0.5 inline-flex items-center justify-center group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-white group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
                 民事侵權責任
             </button>
         </div>
     </div>
 
-    <!-- 勞基法第59條 Modal -->
-    <div id="lawModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-slate-800 rounded-xl md:rounded-2xl border border-slate-600 shadow-2xl w-[95vw] max-w-5xl h-[90vh] flex flex-col transform scale-95 transition-transform duration-300" id="lawModalContent">
-            <div class="p-5 md:p-6 border-b border-slate-700 flex justify-between items-center bg-slate-800/80 rounded-t-xl md:rounded-t-2xl shrink-0">
-                <h3 class="text-xl md:text-2xl lg:text-3xl font-bold text-amber-400 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+    <div id="lawModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-2 sm:p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-[95vw] max-w-5xl h-[90vh] flex flex-col transform scale-95 transition-transform duration-300" id="lawModalContent">
+            <div class="p-5 md:p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50 rounded-t-2xl shrink-0">
+                <h3 class="text-2xl md:text-3xl font-black text-slate-800 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
                     第 七 章 職業災害補償
                 </h3>
-                <button onclick="toggleLawModal()" class="text-slate-400 hover:text-white transition-colors bg-slate-700 hover:bg-slate-600 p-2 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <button onclick="toggleLawModal()" class="text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition-colors p-2 rounded-lg focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
-            <div class="p-6 md:p-8 overflow-y-auto text-base md:text-lg lg:text-xl text-slate-300 leading-relaxed space-y-5 flex-1">
-                <p class="font-bold text-white text-xl md:text-2xl">第 59 條</p>
-                <p>勞工因遭遇職業災害而致死亡、失能、傷害或疾病時，雇主應依下列規定予以補償。但如同一事故，依勞工保險條例或其他法令規定，已由雇主支付費用補償者，雇主得予以抵充之：</p>
-                <div class="pl-2 md:pl-6 space-y-4">
-                    <p>一、勞工受傷或罹患職業病時，雇主應補償其必需之醫療費用。職業病之種類及其醫療範圍，依勞工保險條例有關之規定。</p>
-                    <p>二、勞工在醫療中不能工作時，雇主應按其原領工資數額予以補償。但醫療期間屆滿二年仍未能痊癒，經指定之醫院診斷，審定為喪失原有工作能力，且不合第三款之失能給付標準者，雇主得一次給付四十個月之平均工資後，免除此項工資補償責任。</p>
-                    <p>三、勞工經治療終止後，經指定之醫院診斷，審定其遺存障害者，雇主應按其平均工資及其失能程度，一次給予失能補償。失能補償標準，依勞工保險條例有關之規定。</p>
-                    <p>四、勞工遭遇職業傷害或罹患職業病而死亡時，雇主除給與五個月平均工資之喪葬費外，並應一次給與其遺屬四十個月平均工資之死亡補償。其遺屬受領死亡補償之順位如下：</p>
-                    <ul class="pl-6 md:pl-8 list-disc space-y-2">
-                        <li>（一）配偶及子女。</li>
-                        <li>（二）父母。</li>
-                        <li>（三）祖父母。</li>
-                        <li>（四）孫子女。</li>
-                        <li>（五）兄弟姐妹。</li>
-                    </ul>
+            <div class="p-6 md:p-8 overflow-y-auto text-lg md:text-xl text-slate-700 leading-relaxed space-y-6 flex-1 bg-white">
+                <p class="font-black text-slate-900 text-2xl md:text-3xl border-l-4 border-amber-500 pl-4">第 59 條</p>
+                <p class="font-medium">勞工因遭遇職業災害而致死亡、失能、傷害或疾病時，雇主應依下列規定予以補償。但如同一事故，依勞工保險條例或其他法令規定，已由雇主支付費用補償者，雇主得予以抵充之：</p>
+                <div class="pl-2 md:pl-6 space-y-5">
+                    <p class="bg-slate-50 p-4 rounded-xl border border-slate-100"><strong class="text-slate-800">一、</strong>勞工受傷或罹患職業病時，雇主應補償其必需之醫療費用。職業病之種類及其醫療範圍，依勞工保險條例有關之規定。</p>
+                    <p class="bg-slate-50 p-4 rounded-xl border border-slate-100"><strong class="text-slate-800">二、</strong>勞工在醫療中不能工作時，雇主應按其原領工資數額予以補償。但醫療期間屆滿二年仍未能痊癒，經指定之醫院診斷，審定為喪失原有工作能力，且不合第三款之失能給付標準者，雇主得一次給付四十個月之平均工資後，免除此項工資補償責任。</p>
+                    <p class="bg-slate-50 p-4 rounded-xl border border-slate-100"><strong class="text-slate-800">三、</strong>勞工經治療終止後，經指定之醫院診斷，審定其遺存障害者，雇主應按其平均工資及其失能程度，一次給予失能補償。失能補償標準，依勞工保險條例有關之規定。</p>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p><strong class="text-slate-800">四、</strong>勞工遭遇職業傷害或罹患職業病而死亡時，雇主除給與五個月平均工資之喪葬費外，並應一次給與其遺屬四十個月平均工資之死亡補償。其遺屬受領死亡補償之順位如下：</p>
+                        <ul class="pl-6 md:pl-8 list-none mt-3 space-y-2 font-medium">
+                            <li class="flex items-center"><span class="w-8 text-amber-600 font-bold">（一）</span>配偶及子女。</li>
+                            <li class="flex items-center"><span class="w-8 text-amber-600 font-bold">（二）</span>父母。</li>
+                            <li class="flex items-center"><span class="w-8 text-amber-600 font-bold">（三）</span>祖父母。</li>
+                            <li class="flex items-center"><span class="w-8 text-amber-600 font-bold">（四）</span>孫子女。</li>
+                            <li class="flex items-center"><span class="w-8 text-amber-600 font-bold">（五）</span>兄弟姐妹。</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <div class="p-4 md:p-5 border-t border-slate-700 text-center bg-slate-800/80 rounded-b-xl md:rounded-b-2xl shrink-0">
-                <button onclick="toggleLawModal()" class="px-10 py-3 text-lg bg-amber-600 hover:bg-amber-500 text-white rounded-xl transition-colors font-bold shadow-lg">關閉</button>
+            <div class="p-4 md:p-5 border-t border-slate-200 text-center bg-slate-50 rounded-b-2xl shrink-0">
+                <button onclick="toggleLawModal()" class="px-12 py-3.5 text-lg bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-colors font-bold shadow-lg focus:outline-none">關閉</button>
             </div>
         </div>
     </div>
 
-    <!-- 民事侵權責任 Modal -->
-    <div id="civilLawModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-slate-800 rounded-xl md:rounded-2xl border border-red-900/50 shadow-2xl w-[98vw] md:w-[95vw] max-w-7xl h-[95vh] md:h-[90vh] flex flex-col transform scale-95 transition-transform duration-300" id="civilLawModalContent">
+    <div id="civilLawModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-2 sm:p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl border border-red-200 shadow-2xl w-[95vw] h-[95vh] flex flex-col transform scale-95 transition-transform duration-300" id="civilLawModalContent">
             
-            <div class="p-5 md:p-6 border-b border-slate-700 flex justify-between items-center bg-slate-800/80 rounded-t-xl md:rounded-t-2xl shrink-0">
-                <h3 class="text-xl md:text-2xl lg:text-3xl font-bold text-red-400 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
+            <div class="p-5 md:p-6 border-b border-slate-200 flex justify-between items-center bg-red-50 rounded-t-2xl shrink-0">
+                <h3 class="text-2xl md:text-3xl font-black text-red-700 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
                     民事侵權責任賠償範例 (民法192、194條)
                 </h3>
-                <button onclick="toggleCivilLawModal()" class="text-slate-400 hover:text-white transition-colors bg-slate-700 hover:bg-slate-600 p-2 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-8 md:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <button onclick="toggleCivilLawModal()" class="text-red-400 hover:text-red-700 hover:bg-red-100 transition-colors p-2 rounded-lg focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
             
-            <div class="p-5 md:p-8 overflow-y-auto text-base md:text-lg leading-relaxed flex-1">
+            <div class="p-5 md:p-8 overflow-y-auto text-lg leading-relaxed flex-1 bg-white">
                 <!-- 個案背景資訊 -->
-                <div class="mb-6 bg-slate-700/40 p-5 md:p-6 rounded-xl border border-slate-600/50">
-                    <h4 class="text-amber-400 font-bold mb-3 md:mb-4 flex items-center text-lg md:text-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
+                <div class="mb-8 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="text-slate-800 font-black mb-4 flex items-center text-xl md:text-2xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2 text-slate-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>
                         個案背景資訊
                     </h4>
-                    <ul class="text-base md:text-lg text-slate-300 space-y-2 md:space-y-3 list-disc pl-6 md:pl-8">
-                        <li><strong class="text-white">事故概況：</strong>花蓮大理石工廠員工 28 歲，107/6/12 到職，6/29 於工作中意外，7/3 身故。</li>
-                        <li><strong class="text-white">家庭狀況：</strong>未婚，但有同居人，育有 1 子（5 個月大），生母為法定代理人。</li>
-                        <li><strong class="text-white">父母狀況：</strong>父母離異，父 59 歲，母 56 歲（改嫁共 5 子女），共有 3 個小孩。</li>
+                    <ul class="text-lg md:text-xl text-slate-700 space-y-3 list-disc pl-8 font-medium">
+                        <li><strong class="text-slate-900 font-bold">事故概況：</strong>花蓮大理石工廠員工 28 歲，107/6/12 到職，6/29 於工作中意外，7/3 身故。</li>
+                        <li><strong class="text-slate-900 font-bold">家庭狀況：</strong>未婚，但有同居人，育有 1 子（5 個月大），生母為法定代理人。</li>
+                        <li><strong class="text-slate-900 font-bold">父母狀況：</strong>父母離異，父 59 歲，母 56 歲（改嫁共 5 子女），共有 3 個小孩。</li>
                     </ul>
                 </div>
 
                 <!-- 賠償對照表 -->
-                <div class="overflow-x-auto rounded-xl border border-slate-700 mb-6">
-                    <table class="w-full text-left text-base md:text-lg min-w-[900px] border-collapse">
-                        <thead class="bg-slate-700 text-slate-200">
+                <div class="overflow-x-auto rounded-2xl border border-slate-300 mb-8 shadow-sm">
+                    <table class="w-full text-left text-lg md:text-xl min-w-[900px] border-collapse bg-white">
+                        <thead class="bg-slate-100 text-slate-800">
                             <tr>
-                                <th class="p-4 md:p-5 font-bold border-b border-slate-600 w-1/5 text-lg md:text-xl">項目</th>
-                                <th class="p-4 md:p-5 font-bold border-b border-slate-600 border-l w-2/5 text-lg md:text-xl">勞方求償主張</th>
-                                <th class="p-4 md:p-5 font-bold border-b border-slate-600 border-l w-2/5 text-lg md:text-xl">合理估算 (資方/判決)</th>
+                                <th class="p-5 font-black border-b border-slate-300 w-1/5 text-xl">項目</th>
+                                <th class="p-5 font-black border-b border-slate-300 border-l w-2/5 text-xl text-red-700">勞方求償主張</th>
+                                <th class="p-5 font-black border-b border-slate-300 border-l w-2/5 text-xl text-blue-700">合理估算 (資方/判決)</th>
                             </tr>
                         </thead>
-                        <tbody class="text-slate-300 divide-y divide-slate-700">
-                            <tr class="hover:bg-slate-700/30">
-                                <td class="p-4 md:p-5 font-bold text-white text-lg">喪葬費</td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 text-lg md:text-xl text-white">200,000</td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 text-lg md:text-xl text-white">200,000</td>
+                        <tbody class="text-slate-700 divide-y divide-slate-200">
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-5 font-bold text-slate-900">喪葬費</td>
+                                <td class="p-5 border-l border-slate-200 text-xl font-semibold">200,000</td>
+                                <td class="p-5 border-l border-slate-200 text-xl font-semibold">200,000</td>
                             </tr>
-                            <tr class="hover:bg-slate-700/30">
-                                <td class="p-4 md:p-5 font-bold text-white text-lg">小孩扶養費</td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 text-sm md:text-base text-slate-300 space-y-2">
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-5 font-bold text-slate-900">小孩扶養費</td>
+                                <td class="p-5 border-l border-slate-200 text-base md:text-lg space-y-2">
                                     <p>育有剛出生一子，以每月 20,000 至 20 歲，共求償：</p>
-                                    <p class="font-mono bg-slate-900/50 inline-block px-2 py-1 rounded">20,000 * 12 * 20</p>
-                                    <p>= <strong class="text-white text-lg md:text-xl">4,800,000</strong></p>
+                                    <p class="font-mono bg-red-50 text-red-800 inline-block px-3 py-1 rounded font-bold border border-red-100">20,000 * 12 * 20</p>
+                                    <p>= <strong class="text-red-600 text-xl md:text-2xl">4,800,000</strong></p>
                                 </td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 text-sm md:text-base text-slate-300 space-y-2">
+                                <td class="p-5 border-l border-slate-200 text-base md:text-lg space-y-2">
                                     <p>最低生活費(台灣省)：每月 12,388 至 20 歲，共：</p>
-                                    <p class="font-mono bg-slate-900/50 inline-block px-2 py-1 rounded">12,388 * 12 * 20 / 2 人 (父母共養)</p>
-                                    <p>= <strong class="text-white text-lg md:text-xl">1,486,560</strong></p>
+                                    <p class="font-mono bg-blue-50 text-blue-800 inline-block px-3 py-1 rounded font-bold border border-blue-100">12,388 * 12 * 20 / 2 人 (父母共養)</p>
+                                    <p>= <strong class="text-blue-600 text-xl md:text-2xl">1,486,560</strong></p>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-slate-700/30">
-                                <td class="p-4 md:p-5 font-bold text-white text-lg">父母扶養費</td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 text-sm md:text-base text-slate-300 space-y-2">
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-5 font-bold text-slate-900">父母扶養費</td>
+                                <td class="p-5 border-l border-slate-200 text-base md:text-lg space-y-3">
                                     <p>以退休至生命終值表(男79, 女83)：</p>
-                                    <p>父：14年 <span class="font-mono bg-slate-900/50 px-2 py-0.5 rounded">(14*12*18000)/3</span> = 1,008,000</p>
-                                    <p>母：18年 <span class="font-mono bg-slate-900/50 px-2 py-0.5 rounded">(18*12*18000)/5</span> = 777,600</p>
-                                    <p>= <strong class="text-white text-lg md:text-xl">1,785,600</strong></p>
+                                    <p>父：14年 <span class="font-mono bg-slate-100 text-slate-800 px-2 py-0.5 rounded font-bold">(14*12*18000)/3</span> = 1,008,000</p>
+                                    <p>母：18年 <span class="font-mono bg-slate-100 text-slate-800 px-2 py-0.5 rounded font-bold">(18*12*18000)/5</span> = 777,600</p>
+                                    <p>= <strong class="text-red-600 text-xl md:text-2xl">1,785,600</strong></p>
                                 </td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 text-sm md:text-base text-slate-300 space-y-2">
+                                <td class="p-5 border-l border-slate-200 text-base md:text-lg space-y-3">
                                     <p>以生命終值表(男76.3, 女83.4)：</p>
-                                    <p>父：17.3年 <span class="font-mono bg-slate-900/50 px-2 py-0.5 rounded">(12388*12*17.3)/3</span> = 857,250</p>
-                                    <p>母：27.4年 <span class="font-mono bg-slate-900/50 px-2 py-0.5 rounded">(12388*12*27.4)/5</span> = 814,635</p>
-                                    <p>= <strong class="text-white text-lg md:text-xl">1,671,885</strong></p>
+                                    <p>父：17.3年 <span class="font-mono bg-slate-100 text-slate-800 px-2 py-0.5 rounded font-bold">(12388*12*17.3)/3</span> = 857,250</p>
+                                    <p>母：27.4年 <span class="font-mono bg-slate-100 text-slate-800 px-2 py-0.5 rounded font-bold">(12388*12*27.4)/5</span> = 814,635</p>
+                                    <p>= <strong class="text-blue-600 text-xl md:text-2xl">1,671,885</strong></p>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-slate-700/30">
-                                <td class="p-4 md:p-5 font-bold text-white text-lg">精神慰撫金<br><span class="text-sm text-slate-400 font-normal mt-1 block">(精神損失)</span></td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 text-sm md:text-base text-slate-300 space-y-2">
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-5 font-bold text-slate-900">精神慰撫金<br><span class="text-sm text-slate-500 font-medium mt-1 block">(精神損失)</span></td>
+                                <td class="p-5 border-l border-slate-200 text-base md:text-lg space-y-2">
                                     <p>父、母、子、三人求償各：</p>
-                                    <p class="font-mono bg-slate-900/50 inline-block px-2 py-1 rounded">800,000 * 3</p>
-                                    <p>= <strong class="text-white text-lg md:text-xl">2,400,000</strong></p>
+                                    <p class="font-mono bg-red-50 text-red-800 inline-block px-3 py-1 rounded font-bold border border-red-100">800,000 * 3</p>
+                                    <p>= <strong class="text-red-600 text-xl md:text-2xl">2,400,000</strong></p>
                                 </td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 text-sm md:text-base text-slate-300 space-y-2">
+                                <td class="p-5 border-l border-slate-200 text-base md:text-lg space-y-2">
                                     <p>父、母、子、三人求償各：</p>
-                                    <p class="font-mono bg-slate-900/50 inline-block px-2 py-1 rounded">500,000 * 3</p>
-                                    <p>= <strong class="text-white text-lg md:text-xl">1,500,000</strong></p>
+                                    <p class="font-mono bg-blue-50 text-blue-800 inline-block px-3 py-1 rounded font-bold border border-blue-100">500,000 * 3</p>
+                                    <p>= <strong class="text-blue-600 text-xl md:text-2xl">1,500,000</strong></p>
                                 </td>
                             </tr>
-                            <tr class="bg-slate-900/80">
-                                <td class="p-4 md:p-5 font-bold text-amber-400 text-lg md:text-xl">小計金額</td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 font-bold text-red-400 text-2xl md:text-3xl">$9,185,600</td>
-                                <td class="p-4 md:p-5 border-l border-slate-700 font-bold text-amber-400 text-2xl md:text-3xl">$4,858,445</td>
+                            <tr class="bg-slate-100">
+                                <td class="p-5 font-black text-slate-800 text-xl md:text-2xl border-t-2 border-slate-300">小計金額</td>
+                                <td class="p-5 border-l border-t-2 border-slate-300 font-black text-red-600 text-3xl md:text-4xl">$9,185,600</td>
+                                <td class="p-5 border-l border-t-2 border-slate-300 font-black text-blue-700 text-3xl md:text-4xl">$4,858,445</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- 最終計算區塊 -->
-                <div class="bg-red-950/30 p-5 md:p-8 rounded-xl border border-red-900/50 text-center sm:text-left sm:flex sm:items-center sm:justify-between shadow-inner">
-                    <div class="mb-4 sm:mb-0 space-y-2">
-                        <p class="text-sm md:text-base text-slate-400">判決金額 $4,858,445 - 雇主已付 $120,000 - 勞保給付 $1,080,000</p>
-                        <h4 class="text-white font-bold text-lg md:text-xl lg:text-2xl">資方最終應再給付：</h4>
+                <div class="bg-red-50 p-6 md:p-8 rounded-2xl border-2 border-red-200 text-center sm:text-left sm:flex sm:items-center sm:justify-between shadow-md mb-8">
+                    <div class="mb-4 sm:mb-0 space-y-3">
+                        <p class="text-base md:text-lg text-red-700 font-semibold bg-white inline-block px-3 py-1 rounded-lg border border-red-100">判決金額 $4,858,445 - 雇主已付 $120,000 - 勞保給付 $1,080,000</p>
+                        <h4 class="text-slate-900 font-black text-xl md:text-2xl lg:text-3xl">資方最終應再給付：</h4>
                     </div>
-                    <div class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-red-500 bg-red-950/50 px-6 py-4 rounded-xl inline-block border border-red-900 tracking-wide shadow-lg">
+                    <div class="text-4xl md:text-5xl lg:text-6xl font-black text-white bg-red-600 px-8 py-5 rounded-xl inline-block tracking-wide shadow-xl shadow-red-600/30">
                         $3,658,445
                     </div>
                 </div>
 
                 <!-- 相關法條收折區塊 -->
-                <div class="mt-8 border border-slate-700 rounded-xl overflow-hidden bg-slate-800/30">
-                    <button onclick="toggleRelatedLaws()" class="w-full px-5 py-4 flex justify-between items-center bg-slate-700/40 hover:bg-slate-700/70 transition-colors focus:outline-none">
-                        <span class="text-lg md:text-xl font-bold text-slate-200 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                <div class="border border-slate-300 rounded-2xl overflow-hidden bg-white shadow-sm">
+                    <button onclick="toggleRelatedLaws()" class="w-full px-6 py-5 flex justify-between items-center bg-slate-50 hover:bg-slate-100 transition-colors focus:outline-none">
+                        <span class="text-xl md:text-2xl font-black text-slate-800 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-3 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
                             相關法條參考
                         </span>
-                        <svg id="law-chevron" class="w-6 h-6 text-slate-400 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        <svg id="law-chevron" class="w-7 h-7 text-slate-500 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </button>
                     
-                    <div id="related-laws-content" class="hidden px-5 py-6 space-y-6 text-base md:text-lg bg-slate-900/40 border-t border-slate-700/50 text-slate-300 leading-relaxed">
-                        <div>
-                            <h5 class="text-amber-400 font-bold mb-2 text-lg md:text-xl">第 184 條</h5>
+                    <div id="related-laws-content" class="hidden px-6 py-8 space-y-8 text-lg md:text-xl bg-white border-t border-slate-200 text-slate-700 leading-relaxed font-medium">
+                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                            <h5 class="text-slate-900 font-black mb-3 text-xl md:text-2xl border-l-4 border-slate-400 pl-3">第 184 條</h5>
                             <p>因故意或過失，不法侵害他人之權利者，負損害賠償責任。故意以背於善良風俗之方法，加損害於他人者亦同。<br>
                             違反保護他人之法律，致生損害於他人者，負賠償責任。但能證明其行為無過失者，不在此限。</p>
                         </div>
-                        
-                        <hr class="border-slate-700">
 
-                        <div>
-                            <h5 class="text-amber-400 font-bold mb-2 text-lg md:text-xl">第 192 條</h5>
+                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                            <h5 class="text-slate-900 font-black mb-3 text-xl md:text-2xl border-l-4 border-slate-400 pl-3">第 192 條</h5>
                             <p>不法侵害他人致死者，對於支出醫療及增加生活上需要之費用或殯葬費之人，亦應負損害賠償責任。<br>
                             被害人對於第三人負有法定扶養義務者，加害人對於該第三人亦應負損害賠償責任。<br>
                             第一百九十三條第二項之規定，於前項損害賠償適用之。</p>
                         </div>
 
-                        <hr class="border-slate-700">
-
-                        <div>
-                            <h5 class="text-amber-400 font-bold mb-2 text-lg md:text-xl">第 193 條</h5>
+                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                            <h5 class="text-slate-900 font-black mb-3 text-xl md:text-2xl border-l-4 border-slate-400 pl-3">第 193 條</h5>
                             <p>不法侵害他人之身體或健康者，對於被害人因此喪失或減少勞動能力或增加生活上之需要時，應負損害賠償責任。<br>
                             前項損害賠償，法院得因當事人之聲請，定為支付定期金。但須命加害人提出擔保。</p>
                         </div>
 
-                        <hr class="border-slate-700">
-
-                        <div>
-                            <h5 class="text-amber-400 font-bold mb-2 text-lg md:text-xl">第 194 條</h5>
+                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                            <h5 class="text-slate-900 font-black mb-3 text-xl md:text-2xl border-l-4 border-slate-400 pl-3">第 194 條</h5>
                             <p>不法侵害他人致死者，被害人之父、母、子、女及配偶，雖非財產上之損害，亦得請求賠償相當之金額。</p>
                         </div>
 
-                        <hr class="border-slate-700">
-
-                        <div>
-                            <h5 class="text-amber-400 font-bold mb-2 text-lg md:text-xl">第 195 條</h5>
+                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                            <h5 class="text-slate-900 font-black mb-3 text-xl md:text-2xl border-l-4 border-slate-400 pl-3">第 195 條</h5>
                             <p>不法侵害他人之身體、健康、名譽、自由、信用、隱私、貞操，或不法侵害其他人格法益而情節重大者，被害人雖非財產上之損害，亦得請求賠償相當之金額。其名譽被侵害者，並得請求回復名譽之適當處分。<br>
                             前項請求權，不得讓與或繼承。但以金額賠償之請求權已依契約承諾，或已起訴者，不在此限。<br>
                             前二項規定，於不法侵害他人基於父、母、子、女或配偶關係之身分法益而情節重大者，準用之。</p>
                         </div>
 
-                        <hr class="border-slate-700">
-
-                        <div>
-                            <h5 class="text-amber-400 font-bold mb-2 text-lg md:text-xl">第 483-1 條</h5>
+                        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                            <h5 class="text-slate-900 font-black mb-3 text-xl md:text-2xl border-l-4 border-slate-400 pl-3">第 483-1 條</h5>
                             <p>受僱人服勞務，其生命、身體、健康有受危害之虞者，僱用人應按其情形為必要之預防。</p>
                         </div>
                     </div>
@@ -340,13 +467,12 @@
 
             </div>
 
-            <div class="p-4 md:p-5 border-t border-slate-700 text-center bg-slate-800/80 rounded-b-xl md:rounded-b-2xl shrink-0">
-                <button onclick="toggleCivilLawModal()" class="px-10 py-3 text-lg bg-red-700 hover:bg-red-600 text-white rounded-xl transition-colors font-bold shadow-lg">關閉範例</button>
+            <div class="p-4 md:p-5 border-t border-slate-200 text-center bg-red-50 rounded-b-2xl shrink-0">
+                <button onclick="toggleCivilLawModal()" class="px-12 py-3.5 text-lg bg-red-600 hover:bg-red-700 text-white rounded-xl transition-colors font-bold shadow-lg focus:outline-none">關閉範例</button>
             </div>
         </div>
     </div>
 
-    <!-- 運算邏輯 JavaScript -->
     <script>
         const actInput = document.getElementById('actual_salary');
         const insInput = document.getElementById('insured_salary');
@@ -366,7 +492,7 @@
             // 更新月薪差額顯示
             document.getElementById('salary_gap').innerText = formatCurrency(gap) + ' / 月';
             
-            // 動態更新文字
+            // 動態更新警報標籤
             const alertBadge = document.getElementById('alert_badge');
             
             if (isUnderReporting) {
@@ -412,7 +538,7 @@
             // 渲染總和
             document.getElementById('total_insurance_display').innerText = formatCurrency(total_ins);
             document.getElementById('total_employer_display').innerText = formatCurrency(total_gap);
-            document.getElementById('warning_total').innerText = formatCurrency(total_gap);
+            document.getElementById('warning_total').innerText = formatCurrency(total_gap).replace('NT$ ', '');
         }
 
         // 綁定輸入事件，即時運算
@@ -462,7 +588,7 @@
                 chevron.classList.add('rotate-180');
                 // 平滑滾動讓內容更容易閱讀
                 setTimeout(() => {
-                    content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    content.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 100);
             } else {
                 content.classList.add('hidden');
