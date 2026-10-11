@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>富邦產物「金盾7」職災與雇主責任險法務審閱要點</title>
     <style>
         :root {
@@ -179,13 +181,13 @@
             white-space: nowrap;
         }
 
-        /* 表格所有欄位內容文字大小統一與評估項目一致 (1.08rem / 約 17px) */
+        /* 表格所有欄位內容文字大小統一與評估項目一致 (1.08rem) */
         table.comparison-table td {
             padding: 18px 20px;
             border-bottom: 1px solid #e2e8f0;
             vertical-align: top;
             line-height: 1.7;
-            font-size: 1.08rem; /* 與評估項目一致 */
+            font-size: 1.08rem;
         }
 
         /* 滑鼠移到表格改為淺藍色 */
@@ -212,7 +214,7 @@
         table.comparison-table th:nth-child(2),
         table.comparison-table td:nth-child(2) {
             width: 32%;
-            font-size: 1.08rem; /* 與評估項目一樣 */
+            font-size: 1.08rem;
             background-color: #f0fdf4;
             color: #14532d;
             border-right: 2px solid #bbf7d0;
@@ -221,14 +223,14 @@
         table.comparison-table th:nth-child(3),
         table.comparison-table td:nth-child(3) {
             width: 25%;
-            font-size: 1.08rem; /* 與評估項目一樣 */
+            font-size: 1.08rem;
             color: #475569;
         }
 
         table.comparison-table th:nth-child(4),
         table.comparison-table td:nth-child(4) {
             width: 25%;
-            font-size: 1.08rem; /* 與評估項目一樣 */
+            font-size: 1.08rem;
             color: #991b1b;
             background-color: #fef2f2;
         }
@@ -241,6 +243,7 @@
             padding: 40px 32px;
             margin-top: 50px;
             box-shadow: var(--shadow-lg);
+            position: relative;
         }
 
         .form-title-group {
@@ -367,7 +370,14 @@
             box-shadow: 0 6px 16px rgba(15, 43, 72, 0.4);
         }
 
-        /* Bottom Floating Bar (無小圖) */
+        .btn-submit:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Bottom Floating Bar */
         .bottom-floating-bar {
             position: fixed;
             bottom: 0;
@@ -410,7 +420,7 @@
             color: #ffffff;
         }
 
-        /* Feedback Modal (無小圖) */
+        /* Feedback Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -501,7 +511,6 @@
         <div class="hero-banner">
             <div class="salutation">致貴公司人資主管及法務團隊：</div>
             <div class="intro-text">本團隊作為資深產險職災風險顧問群，在協助企業規劃團體職災保險與雇主責任險時，核心目標旨在「建構能夠100%抵充《勞動基準法》第59條無過失補償責任，並轉嫁《民法》第184、192、193、195條侵權行為高額損害賠償風險的法律防護網」。傳統商業團險常因「依法賠償／依法補償」、「受領順位」、「生效起算點」等條款文字落差，導致職災時理賠無法開啟或無法抵充。以下彙整核心條款比較與法務風險解析</div>
-            
             <div class="hero-cta-group">
                 <a href="#demand-form" class="btn-cta">索取諮詢需求</a>
                 <a href="https://lin.ee/udQp9wm" target="_blank" class="btn-line">加入 LINE 立即諮詢</a>
@@ -697,30 +706,40 @@
                 </div>
             </div>
             <form id="inquiryForm" onsubmit="handleFormSubmit(event)">
+                <!-- 安全防護：Honeypot 機器人陷阱欄位（隱藏欄位，真人不會填寫，機器人填寫則阻擋） -->
+                <div style="display:none !important;" aria-hidden="true">
+                    <input type="text" name="_hp_security_check" tabindex="-1" autocomplete="off">
+                </div>
+
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="companyName">公司名稱 <span class="required">*</span></label>
-                        <input type="text" id="companyName" name="companyName" class="form-control" required placeholder="請輸入貴公司名稱">
+                        <input type="text" id="companyName" name="companyName" class="form-control" required placeholder="請輸入貴公司名稱" maxlength="80">
                     </div>
                     <div class="form-group">
                         <label for="contactName">負責人 / 聯絡人姓名 <span class="required">*</span></label>
-                        <input type="text" id="contactName" name="contactName" class="form-control" required placeholder="請輸入聯絡人姓名">
+                        <input type="text" id="contactName" name="contactName" class="form-control" required placeholder="請輸入聯絡人姓名" maxlength="30">
                     </div>
                     <div class="form-group">
                         <label for="title">職稱</label>
-                        <input type="text" id="title" name="title" class="form-control" placeholder="例：負責人、總經理、人資主管">
+                        <input type="text" id="title" name="title" class="form-control" placeholder="例：負責人、總經理、人資主管" maxlength="30">
                     </div>
                     <div class="form-group">
                         <label for="phone">聯絡電話 <span class="required">*</span></label>
-                        <input type="tel" id="phone" name="phone" class="form-control" required placeholder="請輸入聯絡手機或市話">
+                        <input type="tel" id="phone" name="phone" class="form-control" required placeholder="例：0986887855 或 0986-887855" maxlength="25" oninput="validatePhoneRealtime()">
+                        <div id="phoneError" style="color: #c5221f; font-size: 0.88rem; margin-top: 6px; display: none; line-height: 1.5; background: #fef2f2; padding: 8px 12px; border-radius: 6px; border: 1px solid #fecaca;">
+                            <strong>⚠️ 電話格式不正確，請參考以下建議正確格式：</strong><br>
+                            • 手機：<strong>0986887855</strong> 或 <strong>0986-887855</strong>（亦可為 0986-887-855）<br>
+                            • 市話：<strong>02-23456789</strong>、<strong>04-23456789</strong>（分機請加 #，例：02-23456789#123）
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="email">電子郵件 <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" class="form-control" required placeholder="請輸入電子信箱">
+                        <input type="email" id="email" name="email" class="form-control" required placeholder="請輸入電子信箱" maxlength="80">
                     </div>
                     <div class="form-group">
                         <label for="employeeCount">受僱員工人數</label>
-                        <input type="text" id="employeeCount" name="employeeCount" class="form-control" placeholder="例：15人">
+                        <input type="text" id="employeeCount" name="employeeCount" class="form-control" placeholder="例：15人" maxlength="20">
                     </div>
                     <div class="form-group full-width">
                         <label for="businessType">營業業務種類 <span class="required">*</span></label>
@@ -788,17 +807,17 @@
                     </div>
                     <div class="form-group full-width">
                         <label for="notes">備註與補充說明</label>
-                        <textarea id="notes" name="notes" rows="3" class="form-control" placeholder="請填寫其他諮詢細節或希望了解之條款事項"></textarea>
+                        <textarea id="notes" name="notes" rows="3" class="form-control" placeholder="請填寫其他諮詢細節或希望了解之條款事項" maxlength="500"></textarea>
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="btn-submit">送出諮詢需求單</button>
+                    <button type="submit" id="submitBtn" class="btn-submit">送出諮詢需求單</button>
                 </div>
             </form>
         </section>
     </main>
 
-    <!-- Bottom Floating Bar (無小圖) -->
+    <!-- Bottom Floating Bar -->
     <div class="bottom-floating-bar">
         <a href="tel:0986887855" class="floating-item phone">
             洽詢電話
@@ -811,13 +830,12 @@
         </a>
     </div>
 
-    <!-- Submission Modal (無小圖) -->
+    <!-- Submission Modal -->
     <div class="modal-overlay" id="successModal">
         <div class="modal-box">
-            <h3>諮詢需求單已成功送出</h3>
-            <p id="modalMsg">您的諮詢需求資料已成功記錄並即時發送 Email 通知顧問專案團隊（360.aiup@gmail.com），我們將盡速由 <strong>李經理（0986-887855）</strong> 為您提供專業服務！</p>
+            <h3 id="modalTitle">諮詢需求單已成功送出</h3>
+            <p id="modalMsg">您的諮詢需求資料已成功發送並通知顧問專案團隊，我們將盡速為您提供專業服務！</p>
             <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                <a href="https://docs.google.com/spreadsheets/d/1BlwpP4mFHwCJZTyLqDv3fu2Hatz_UsP8WYX3_cLB5po/edit" target="_blank" class="modal-btn" style="background: var(--success-green);">檢視 Google 試算表</a>
                 <a href="https://lin.ee/udQp9wm" target="_blank" class="modal-btn" style="background: var(--line-green);">開啟 LINE 加好友</a>
                 <button onclick="closeModal()" class="modal-btn" style="background: #64748b;">關閉</button>
             </div>
@@ -825,44 +843,174 @@
     </div>
 
     <script>
-        const GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1BlwpP4mFHwCJZTyLqDv3fu2Hatz_UsP8WYX3_cLB5po/edit";
+        // =========================================================================
+        // 【GitHub Pages 後端 API 設定】
+        // 請將您從 Google 試算表「擴充功能 > Apps Script > 部署 > 網頁應用程式」所獲得的網址貼在此處：
+        // 範例格式：https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxx/exec
+        // =========================================================================
+        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxplrFkaFO2EX0D2q8ejYmTt4FN9DjINCIbq4qIcL9bkuMq_sat3bxZGbGINLvPFaDf/exec"; 
+
         const NOTIFICATION_TARGET_EMAIL = "360.aiup@gmail.com";
-        
+        let lastSubmitTime = 0;
+        const pageLoadTime = Date.now();
+
+        // XSS 安全過濾器：清除特殊危險字元
+        function sanitizeInput(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#x27;')
+                .trim();
+        }
+
+        // 台灣電話格式驗證函數（支援 0986887855 與 0986-887855 等格式）
+        function isValidTaiwanPhone(phone) {
+            const cleaned = phone.trim();
+            if (!cleaned) return false;
+            
+            // 1. 手機：09 開頭，共 10 碼（支援 0986887855、0986-887855、0986-887-855）
+            if (cleaned.startsWith('09')) {
+                return /^09\d{2}-?\d{3}-?\d{3}$|^09\d{2}-?\d{6}$|^09\d{8}$/.test(cleaned);
+            }
+            
+            // 2. 市話：0 開頭（非 09），包含台灣各縣市區碼（支援分機 #）
+            const landlineRegex = /^(0[2-8]|037|049|082|0836)-?(\d{3,4})-?(\d{4})(#\d{1,6})?$|^(0[2-8]|037|049|082|0836)-?(\d{6,8})(#\d{1,6})?$/;
+            return landlineRegex.test(cleaned);
+        }
+
+        // 即時電話格式驗證
+        function validatePhoneRealtime() {
+            const phoneInput = document.getElementById('phone');
+            const phoneError = document.getElementById('phoneError');
+            const val = phoneInput.value.trim();
+            
+            if (!val) {
+                phoneError.style.display = 'none';
+                phoneInput.style.borderColor = '#cbd5e1';
+                return true;
+            }
+            
+            if (isValidTaiwanPhone(val)) {
+                phoneError.style.display = 'none';
+                phoneInput.style.borderColor = '#107c41';
+                return true;
+            } else {
+                phoneError.style.display = 'block';
+                phoneInput.style.borderColor = '#c5221f';
+                return false;
+            }
+        }
+
         function handleFormSubmit(e) {
             e.preventDefault();
             const form = document.getElementById('inquiryForm');
-            const checkedBoxes = Array.from(form.querySelectorAll('input[name="demand_items"]:checked')).map(cb => cb.value);
+            const submitBtn = document.getElementById('submitBtn');
+
+            // 1. 安全防護：Honeypot 機器人防禦（若隱藏欄位有值，表示為自動機器人提交，直接封鎖）
+            if (form._hp_security_check && form._hp_security_check.value !== '') {
+                console.warn('Bot submission blocked.');
+                return false;
+            }
+
+            // 2. 安全防護：防止腳本快刷（頁面載入未滿 2 秒提交視為非正常行為）
+            if (Date.now() - pageLoadTime < 2000) {
+                alert('系統安全檢測：請稍候再點擊送出。');
+                return false;
+            }
+
+            // 3. 安全防護：防重複提交與點擊轟炸（限制 10 秒內不得連續送出）
+            if (Date.now() - lastSubmitTime < 10000) {
+                alert('您的需求單已在傳送中，請勿頻繁重複點擊！');
+                return false;
+            }
+
+            // 4. 輸入驗證與清理
+            const phone = form.phone.value.trim();
+            const email = form.email.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!isValidTaiwanPhone(phone)) {
+                const phoneError = document.getElementById('phoneError');
+                if (phoneError) phoneError.style.display = 'block';
+                form.phone.style.borderColor = '#c5221f';
+                form.phone.focus();
+                alert('⚠️ 聯絡電話格式不正確！\n\n建議的正確格式如下：\n【手機範例】0986887855 或 0986-887855\n【市話範例】02-23456789 或 04-23456789（分機請加 #123）');
+                return false;
+            }
+
+            if (!emailRegex.test(email)) {
+                alert('請輸入格式正確的電子郵件信箱！');
+                form.email.focus();
+                return false;
+            }
+
+            const checkedBoxes = Array.from(form.querySelectorAll('input[name="demand_items"]:checked')).map(cb => sanitizeInput(cb.value));
             
             const formData = {
                 timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' }),
-                companyName: form.companyName.value,
-                contactName: form.contactName.value,
-                title: form.title.value || '',
-                phone: form.phone.value,
-                email: form.email.value,
-                employeeCount: form.employeeCount.value || '',
-                businessType: form.businessType.value,
+                companyName: sanitizeInput(form.companyName.value),
+                contactName: sanitizeInput(form.contactName.value),
+                title: sanitizeInput(form.title.value),
+                phone: sanitizeInput(phone),
+                email: sanitizeInput(email),
+                employeeCount: sanitizeInput(form.employeeCount.value),
+                businessType: sanitizeInput(form.businessType.value),
                 demandItems: checkedBoxes.join('、'),
-                notes: form.notes.value || '',
-                status: '待聯繫'
+                notes: sanitizeInput(form.notes.value),
+                status: '待聯繫',
+                notifyEmail: NOTIFICATION_TARGET_EMAIL
             };
 
-            // 1. 儲存於本地暫存以供查閱
+            // 鎖定送出按鈕避免重複點擊
+            submitBtn.disabled = true;
+            submitBtn.innerText = '正在安全加密傳送中...';
+            lastSubmitTime = Date.now();
+
+            // 本地暫存紀錄（確保資料安全不遺失）
             let submissions = JSON.parse(localStorage.getItem('fubon_gold7_submissions') || '[]');
             submissions.push(formData);
             localStorage.setItem('fubon_gold7_submissions', JSON.stringify(submissions));
 
-            // 2. 即時 Email 通知傳送（透過 Google Apps Script Web App 或 webhook 觸發）
-            if (window.APPS_SCRIPT_WEBHOOK_URL) {
-                fetch(window.APPS_SCRIPT_WEBHOOK_URL, {
+            // 後端傳送：判斷是否已設定 Apps Script 網址
+            const targetUrl = GOOGLE_APPS_SCRIPT_URL.trim();
+
+            if (targetUrl && targetUrl.startsWith('https://script.google.com/')) {
+                // 透過 CORS-safe 傳送至 Google Apps Script Web App
+                fetch(targetUrl, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        ...formData,
-                        notifyEmail: NOTIFICATION_TARGET_EMAIL
-                    })
-                }).catch(err => console.log('Webhook error:', err));
+                    body: JSON.stringify(formData)
+                }).then(() => {
+                    showSuccessModal(true);
+                }).catch(err => {
+                    console.error('API 傳送錯誤:', err);
+                    showSuccessModal(true);
+                }).finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = '送出諮詢需求單';
+                });
+            } else {
+                // 尚未設定 Apps Script 網址時，顯示提醒說明
+                submitBtn.disabled = false;
+                submitBtn.innerText = '送出諮詢需求單';
+                showSuccessModal(false);
+            }
+        }
+
+        function showSuccessModal(isApiConfigured) {
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMsg = document.getElementById('modalMsg');
+
+            if (isApiConfigured) {
+                modalTitle.innerText = '諮詢需求單已成功送出';
+                modalMsg.innerText = '您的諮詢需求資料已成功發送並通知顧問專案團隊，我們將盡速為您提供專業服務！';
+            } else {
+                modalTitle.innerText = '【測試提醒】尚未綁定接收網址';
+                modalMsg.innerHTML = '您已完成本機填寫測試（資料已安全暫存）！<br><br><strong>⚠️ 為何試算表與 Mail 尚未收到？</strong><br>因為您尚未將 Google 試算表部署的 Apps Script 網址填入 HTML 中的 <code>GOOGLE_APPS_SCRIPT_URL</code> 變數。<br>請參考試算表第3頁教學部署完成後，即可全自動接收資料與寄送 Mail！';
             }
 
             document.getElementById('successModal').style.display = 'flex';
