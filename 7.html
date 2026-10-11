@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>富邦產物「金盾7」職災與雇主責任險法務審閱要點</title>
+    <title>金豐專案「金盾7」職災與雇主責任險法務審閱要點</title>
     <style>
         :root {
             --primary-navy: #0f2b48;
@@ -166,12 +166,18 @@
 
         table.comparison-table {
             width: 100%;
+            table-layout: fixed; /* 嚴格鎖定欄寬比例，確保二三四欄平均分配 */
             border-collapse: collapse;
             text-align: left;
+            word-break: break-word;
         }
 
-        /* 表頭文字大小統一為 1.15rem */
-        table.comparison-table thead tr th {
+        /* 表頭文字大小統一為 1.15rem，且第一列欄位名稱全部水平垂直置中 */
+        table.comparison-table thead tr th,
+        table.comparison-table thead tr th:nth-child(1),
+        table.comparison-table thead tr th:nth-child(2),
+        table.comparison-table thead tr th:nth-child(3),
+        table.comparison-table thead tr th:nth-child(4) {
             background-color: #e2e8f0;
             color: var(--primary-navy);
             padding: 16px 20px;
@@ -179,6 +185,8 @@
             font-weight: 800;
             border-bottom: 3px solid var(--primary-navy);
             white-space: nowrap;
+            text-align: center !important; /* 第一列欄位名稱水平置中 */
+            vertical-align: middle !important; /* 第一列欄位名稱垂直置中 */
         }
 
         /* 表格所有欄位內容文字大小統一與評估項目一致 (1.08rem) */
@@ -203,7 +211,7 @@
         /* 各欄設定 */
         table.comparison-table th:nth-child(1),
         table.comparison-table td:nth-child(1) {
-            width: 18%;
+            width: 19%;
             font-size: 1.08rem;
             font-weight: 800;
             color: var(--primary-navy);
@@ -213,7 +221,7 @@
 
         table.comparison-table th:nth-child(2),
         table.comparison-table td:nth-child(2) {
-            width: 32%;
+            width: 27%;
             font-size: 1.08rem;
             background-color: #f0fdf4;
             color: #14532d;
@@ -222,14 +230,14 @@
 
         table.comparison-table th:nth-child(3),
         table.comparison-table td:nth-child(3) {
-            width: 25%;
+            width: 27%;
             font-size: 1.08rem;
             color: #475569;
         }
 
         table.comparison-table th:nth-child(4),
         table.comparison-table td:nth-child(4) {
-            width: 25%;
+            width: 27%;
             font-size: 1.08rem;
             color: #991b1b;
             background-color: #fef2f2;
@@ -507,12 +515,12 @@
 
     <!-- 標題區域：刪除標題上面的按鈕 -->
     <header class="site-header">
-        <h1>富邦產物「金盾7」職災與雇主責任險法務審閱要點</h1>
+        <h1>金豐專案「金盾7」職災與雇主責任險法務審閱要點</h1>
         <div class="hero-banner">
-            <div class="salutation">致貴公司人資主管及法務團隊：</div>
-            <div class="intro-text">本團隊作為資深產險職災風險顧問群，在協助企業規劃團體職災保險與雇主責任險時，核心目標旨在「建構能夠100%抵充《勞動基準法》第59條無過失補償責任，並轉嫁《民法》第184、192、193、195條侵權行為高額損害賠償風險的法律防護網」。傳統商業團險常因「依法賠償／依法補償」、「受領順位」、「生效起算點」等條款文字落差，導致職災時理賠無法開啟或無法抵充。以下彙整核心條款比較與法務風險解析</div>
+            <div class="salutation">致：貴公司負責人、人資主管及法務團隊</div>
+            <div class="intro-text">本團隊作為資深產險職災風險顧問群，在協助企業規劃團體職災保險與雇主責任險時，核心目標旨在「建構能夠100%抵充《勞動基準法》第59條無過失補償責任，並轉嫁《民法》第184、192、193、195條侵權行為高額損害賠償風險的法律防護網」。傳統商業團險常因「依法賠償／依法補償」、「受領順位」、「生效起算點」、「理賠啟動要件」等條款文字落差，導致職災時理賠無法開啟或無法抵充。以下彙整核心條款比較與法務風險解析</div>
             <div class="hero-cta-group">
-                <a href="#demand-form" class="btn-cta">索取諮詢需求</a>
+                <a href="#demand-form" class="btn-cta">填寫諮詢需求單</a>
                 <a href="https://lin.ee/udQp9wm" target="_blank" class="btn-line">加入 LINE 立即諮詢</a>
             </div>
         </div>
@@ -528,10 +536,10 @@
                 <table class="comparison-table">
                     <thead>
                         <tr>
-                            <th>評估項目</th>
-                            <th>富邦產物「金盾7」 （金豐專案）</th>
-                            <th>保險規劃重點</th>
-                            <th>法務風險與抵充效果解析</th>
+                            <th style="text-align: center; vertical-align: middle;">評估項目</th>
+                            <th style="text-align: center; vertical-align: middle;">金豐專案「金盾7-條款解析」</th>
+                            <th style="text-align: center; vertical-align: middle;">保險規劃重點</th>
+                            <th style="text-align: center; vertical-align: middle;">法務風險與抵充效果解析</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -566,10 +574,10 @@
                 <table class="comparison-table">
                     <thead>
                         <tr>
-                            <th>評估項目</th>
-                            <th>富邦產物「金盾7」 （金豐專案）</th>
-                            <th>保險規劃重點</th>
-                            <th>法務風險與抵充效果解析</th>
+                            <th style="text-align: center; vertical-align: middle;">評估項目</th>
+                            <th style="text-align: center; vertical-align: middle;">金豐專案「金盾7-條款解析」</th>
+                            <th style="text-align: center; vertical-align: middle;">保險規劃重點</th>
+                            <th style="text-align: center; vertical-align: middle;">法務風險與抵充效果解析</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -612,10 +620,10 @@
                 <table class="comparison-table">
                     <thead>
                         <tr>
-                            <th>評估項目</th>
-                            <th>富邦產物「金盾7」 （金豐專案）</th>
-                            <th>保險規劃重點</th>
-                            <th>法務風險與抵充效果解析</th>
+                            <th style="text-align: center; vertical-align: middle;">評估項目</th>
+                            <th style="text-align: center; vertical-align: middle;">金豐專案「金盾7-條款解析」</th>
+                            <th style="text-align: center; vertical-align: middle;">保險規劃重點</th>
+                            <th style="text-align: center; vertical-align: middle;">法務風險與抵充效果解析</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -661,10 +669,10 @@
                 <table class="comparison-table">
                     <thead>
                         <tr>
-                            <th>評估項目</th>
-                            <th>富邦產物「金盾7」 （金豐專案）</th>
-                            <th>保險規劃重點</th>
-                            <th>法務風險與抵充效果解析</th>
+                            <th style="text-align: center; vertical-align: middle;">評估項目</th>
+                            <th style="text-align: center; vertical-align: middle;">金豐專案「金盾7-條款解析」</th>
+                            <th style="text-align: center; vertical-align: middle;">保險規劃重點</th>
+                            <th style="text-align: center; vertical-align: middle;">法務風險與抵充效果解析</th>
                         </tr>
                     </thead>
                     <tbody>
