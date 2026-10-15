@@ -136,7 +136,7 @@
             padding: 0 20px;
         }
 
-        /* 7.png 圖檔外框與右上角懸浮箭頭 */
+        /* 7.png 圖檔外框與右上角懸浮小箭頭 */
         .image-float-wrapper {
             position: relative;
             margin-bottom: 35px;
@@ -148,7 +148,7 @@
             top: 14px;
             right: 14px;
             z-index: 10;
-            background: rgba(15, 43, 72, 0.75);
+            background: rgba(15, 43, 72, 0.8);
             color: #ffffff;
             width: 36px;
             height: 36px;
@@ -774,35 +774,65 @@
                 </div>
 
                 <div class="form-grid">
+                    <!-- 1. 公司名稱（已刪除灰色提示文字） -->
                     <div class="form-group">
                         <label for="companyName">公司名稱 <span class="required">*</span></label>
-                        <input type="text" id="companyName" name="companyName" class="form-control" required placeholder="請輸入貴公司名稱" maxlength="80">
+                        <input type="text" id="companyName" name="companyName" class="form-control" required maxlength="80">
                     </div>
+
+                    <!-- 2. 負責人 / 聯絡人姓名（已刪除灰色提示文字） -->
                     <div class="form-group">
                         <label for="contactName">負責人 / 聯絡人姓名 <span class="required">*</span></label>
-                        <input type="text" id="contactName" name="contactName" class="form-control" required placeholder="請輸入聯絡人姓名" maxlength="30">
+                        <input type="text" id="contactName" name="contactName" class="form-control" required maxlength="30">
                     </div>
+
+                    <!-- 3. 職稱（已刪除灰色提示文字） -->
                     <div class="form-group">
                         <label for="title">職稱</label>
-                        <input type="text" id="title" name="title" class="form-control" placeholder="例：負責人、總經理、人資主管" maxlength="30">
+                        <input type="text" id="title" name="title" class="form-control" maxlength="30">
                     </div>
+
+                    <!-- 4. 聯絡電話（已刪除灰色提示文字） -->
                     <div class="form-group">
                         <label for="phone">聯絡電話 <span class="required">*</span></label>
-                        <input type="tel" id="phone" name="phone" class="form-control" required placeholder="例：0986887855 或 0986-887855" maxlength="25" oninput="validatePhoneRealtime()">
+                        <input type="tel" id="phone" name="phone" class="form-control" required maxlength="25" oninput="validatePhoneRealtime()">
                         <div id="phoneError" style="color: #c5221f; font-size: 0.88rem; margin-top: 6px; display: none; line-height: 1.5; background: #fef2f2; padding: 8px 12px; border-radius: 6px; border: 1px solid #fecaca;">
                             <strong>⚠️ 電話格式不正確，請參考以下建議正確格式：</strong><br>
                             • 手機：<strong>0986887855</strong> 或 <strong>0986-887855</strong>（亦可為 0986-887-855）<br>
                             • 市話：<strong>02-23456789</strong>、<strong>04-23456789</strong>（分機請加 #，例：02-23456789#123）
                         </div>
                     </div>
+
+                    <!-- 5. 電子郵件（已刪除灰色提示文字） -->
                     <div class="form-group">
                         <label for="email">電子郵件 <span class="required">*</span></label>
-                        <input type="email" id="email" name="email" class="form-control" required placeholder="請輸入電子信箱" maxlength="80">
+                        <input type="email" id="email" name="email" class="form-control" required maxlength="80">
                     </div>
+
+                    <!-- 6. 受僱員工人數（已刪除灰色提示文字） -->
                     <div class="form-group">
                         <label for="employeeCount">受僱員工人數</label>
-                        <input type="text" id="employeeCount" name="employeeCount" class="form-control" placeholder="例：15人" maxlength="20">
+                        <input type="text" id="employeeCount" name="employeeCount" class="form-control" maxlength="20">
                     </div>
+
+                    <!-- 7. LINE ID（已刪除灰色提示文字） -->
+                    <div class="form-group">
+                        <label for="lineId">LINE ID</label>
+                        <input type="text" id="lineId" name="lineId" class="form-control" maxlength="50">
+                    </div>
+
+                    <!-- 8. 方便聯繫時段 -->
+                    <div class="form-group">
+                        <label for="contactTime">方便聯繫時段</label>
+                        <select id="contactTime" name="contactTime" class="form-control">
+                            <option value="" selected>不限 / 皆可</option>
+                            <option value="上午">上午 (09:00 - 12:00)</option>
+                            <option value="下午">下午 (13:30 - 18:00)</option>
+                            <option value="晚上">晚上 (18:30 以後)</option>
+                        </select>
+                    </div>
+
+                    <!-- 9. 營業業務種類 -->
                     <div class="form-group full-width">
                         <label for="businessType">營業業務種類 <span class="required">*</span></label>
                         <select id="businessType" name="businessType" class="form-control" required>
@@ -813,6 +843,8 @@
                             <option value="其他">其他</option>
                         </select>
                     </div>
+
+                    <!-- 10. 諮詢評估需求項目 -->
                     <div class="form-group full-width">
                         <label>諮詢評估需求項目（可複選）</label>
                         <div class="checkbox-container">
@@ -866,11 +898,14 @@
                             </label>
                         </div>
                     </div>
+
+                    <!-- 11. 備註與補充說明 -->
                     <div class="form-group full-width">
                         <label for="notes">備註與補充說明</label>
-                        <textarea id="notes" name="notes" rows="3" class="form-control" placeholder="請填寫其他諮詢細節或希望了解之條款事項" maxlength="500"></textarea>
+                        <textarea id="notes" name="notes" rows="3" class="form-control" placeholder="請填寫其他諮詢細節、希望了解之條款事項，或聯絡方式補充" maxlength="500"></textarea>
                     </div>
                 </div>
+
                 <div class="form-actions">
                     <button type="submit" id="submitBtn" class="btn-submit">送出諮詢需求單</button>
                 </div>
@@ -906,7 +941,7 @@
     <script>
         // =========================================================================
         // 【GitHub Pages 後端 API 設定】
-        // 已成功綁定您的 Google Apps Script 網頁應用程式接收網址
+        // 已成功綁定您的 Google Apps Script 網頁應用程式正式接收網址
         // =========================================================================
         const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxplrFkaFO2EX0D2q8ejYmTt4FN9DjINCIbq4qIcL9bkuMq_sat3bxZGbGINLvPFaDf/exec"; 
 
@@ -1037,6 +1072,8 @@
                 phone: sanitizeInput(phone),
                 email: sanitizeInput(email),
                 employeeCount: sanitizeInput(form.employeeCount.value),
+                lineId: sanitizeInput(form.lineId.value),
+                contactTime: sanitizeInput(form.contactTime.value),
                 businessType: sanitizeInput(form.businessType.value),
                 demandItems: checkedBoxes.join('、'),
                 notes: sanitizeInput(form.notes.value),
