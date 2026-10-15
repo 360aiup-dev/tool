@@ -39,7 +39,7 @@
             padding-bottom: 90px;
         }
 
-        /* Header / Banner - 刪除標題上面的按鈕 */
+        /* 頁首標題區 */
         .site-header {
             background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 100%);
             color: #ffffff;
@@ -129,14 +129,78 @@
             box-shadow: 0 6px 16px rgba(6, 199, 85, 0.5);
         }
 
-        /* Container */
+        /* 容器 */
         .container {
             max-width: 1200px;
             margin: 40px auto 0;
             padding: 0 20px;
         }
 
-        /* Section Blocks */
+        /* 7.png 圖檔外框與右上角懸浮箭頭 */
+        .image-float-wrapper {
+            position: relative;
+            margin-bottom: 35px;
+            width: 100%;
+        }
+
+        .image-toggle-float-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 10;
+            background: rgba(15, 43, 72, 0.75);
+            color: #ffffff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            user-select: none;
+        }
+
+        .image-toggle-float-btn:hover {
+            background: rgba(26, 79, 139, 0.95);
+            transform: scale(1.1);
+        }
+
+        /* 收合時按鈕停靠樣式 */
+        .image-float-wrapper.collapsed .image-toggle-float-btn {
+            position: static;
+            margin: 0 0 15px auto;
+            background: var(--primary-navy);
+            border-radius: 20px;
+            width: auto;
+            height: auto;
+            padding: 6px 16px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            gap: 6px;
+        }
+
+        .image-wrapper {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+        }
+
+        /* 表格卡片 */
         .section-block {
             background: var(--card-bg);
             border-radius: 12px;
@@ -158,7 +222,7 @@
             color: var(--primary-navy);
         }
 
-        /* Table Styling - 調整所有欄位文字大小與評估項目一致 */
+        /* 表格排版 */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -172,7 +236,7 @@
             word-break: break-word;
         }
 
-        /* 表頭文字大小統一為 1.15rem，且第一列欄位名稱全部水平垂直置中 */
+        /* 第一列欄位名稱全數水平及垂直置中 */
         table.comparison-table thead tr th,
         table.comparison-table thead tr th:nth-child(1),
         table.comparison-table thead tr th:nth-child(2),
@@ -185,11 +249,10 @@
             font-weight: 800;
             border-bottom: 3px solid var(--primary-navy);
             white-space: nowrap;
-            text-align: center !important; /* 第一列欄位名稱水平置中 */
-            vertical-align: middle !important; /* 第一列欄位名稱垂直置中 */
+            text-align: center !important;
+            vertical-align: middle !important;
         }
 
-        /* 表格所有欄位內容文字大小統一與評估項目一致 (1.08rem) */
         table.comparison-table td {
             padding: 18px 20px;
             border-bottom: 1px solid #e2e8f0;
@@ -198,17 +261,17 @@
             font-size: 1.08rem;
         }
 
-        /* 滑鼠移到表格改為淺藍色 */
+        /* 滑鼠懸浮淺藍色反白效果 */
         table.comparison-table tbody tr:hover td,
         table.comparison-table tbody tr:hover td:nth-child(1),
         table.comparison-table tbody tr:hover td:nth-child(2),
         table.comparison-table tbody tr:hover td:nth-child(3),
         table.comparison-table tbody tr:hover td:nth-child(4) {
-            background-color: #e0f2fe !important; /* 淺藍色反白 */
+            background-color: #e0f2fe !important;
             transition: background-color 0.15s ease;
         }
 
-        /* 各欄設定 */
+        /* 各欄寬度：第一欄 19%，第二、三、四欄各 27% 平均分配 */
         table.comparison-table th:nth-child(1),
         table.comparison-table td:nth-child(1) {
             width: 19%;
@@ -243,7 +306,7 @@
             background-color: #fef2f2;
         }
 
-        /* Form Card - 諮詢需求單 */
+        /* 諮詢需求單表單 */
         .form-section {
             background: linear-gradient(to bottom, #ffffff, #f8fafc);
             border: 2px solid var(--accent-gold);
@@ -385,7 +448,7 @@
             box-shadow: none;
         }
 
-        /* Bottom Floating Bar */
+        /* 手機底部懸浮快速操作列 */
         .bottom-floating-bar {
             position: fixed;
             bottom: 0;
@@ -428,7 +491,7 @@
             color: #ffffff;
         }
 
-        /* Feedback Modal */
+        /* 送出成功提示視窗 */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -513,7 +576,7 @@
 </head>
 <body>
 
-    <!-- 標題區域：刪除標題上面的按鈕 -->
+    <!-- 頁首標題區域 -->
     <header class="site-header">
         <h1>金豐專案「金盾7」職災與雇主責任險法務審閱要點</h1>
         <div class="hero-banner">
@@ -528,6 +591,18 @@
 
     <main class="container">
 
+        <!-- 7.png 條款架構圖（寬度與下方表格一致，右上角懸浮小箭頭收合/展開） -->
+        <div class="image-float-wrapper" id="imageContainer">
+            <div class="image-toggle-float-btn" id="toggleFloatBtn" onclick="toggleImage()" title="點擊收合或展開圖檔">
+                <span id="toggleIcon">▲</span>
+                <span id="toggleText" style="display: none;">展開圖檔</span>
+            </div>
+            <div class="image-wrapper" id="imageWrapper">
+                <img src="7.png" onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/d/1Ps3annmhw2gZ0Rg1-3CL5MO65W6Wfcya';" alt="金豐專案 金盾7 企業職災風險全面防護 (7.png)">
+            </div>
+        </div>
+
+        <!-- 一、人員異動生效與加退保管道 -->
         <section class="section-block">
             <div class="section-header">
                 <h2>一、人員異動生效與加退保管道</h2>
@@ -536,36 +611,31 @@
                 <table class="comparison-table">
                     <thead>
                         <tr>
-                            <th style="text-align: center; vertical-align: middle;">評估項目</th>
-                            <th style="text-align: center; vertical-align: middle;">金豐專案「金盾7-條款解析」</th>
-                            <th style="text-align: center; vertical-align: middle;">保險規劃重點</th>
-                            <th style="text-align: center; vertical-align: middle;">法務風險與抵充效果解析</th>
+                            <th>評估項目</th>
+                            <th>金豐專案「金盾7-條款解析」</th>
+                            <th>保險規劃重點</th>
+                            <th>法務風險與抵充效果解析</th>
                         </tr>
                     </thead>
                     <tbody>
-    
                         <tr>
                             <td><strong>1.異動生效起算時點</strong></td>
                             <td>AEDX002/AGDX002明訂「自收到傳真所載時間、Email寄送時間或其他足資證明之時間生效」，精準至分秒；亦支援系統線上作業。</td>
                             <td>主保險契約基本條款多預設為「翌日零時」生效。需確認是否有附加當日即時生效條款。</td>
-                            <td>若未附加當日即時生效，新進員工於到職首日或次日清晨發生職災，將出現保障空窗期，雇主須自負賠償責任
-。</td>
+                            <td>若未附加當日即時生效，新進員工於到職首日或次日清晨發生職災，將出現保障空窗期，雇主須自負賠償責任。</td>
                         </tr>
-        
                         <tr>
                             <td><strong>2.預約投保機制</strong></td>
                             <td>AEDX002/AGDX002明訂異動日在通知日之後者，以「通知異動日零時生效」，具備完整預約機制。</td>
-                            <td>傳統作業多僅限當日或事後處理，缺乏系統化預約功能
-。</td>
-                            <td>提供預約加保，確保員工踏入廠區第一秒即具保險防護
-，杜絕行政作業疏失造成的法律漏洞。</td>
+                            <td>傳統作業多僅限當日或事後處理，缺乏系統化預約功能。</td>
+                            <td>提供預約加保，確保員工踏入廠區第一秒即具保險防護，杜絕行政作業疏失造成的法律漏洞。</td>
                         </tr>
-        
                     </tbody>
                 </table>
             </div>
         </section>
-    
+
+        <!-- 二、雇主意外險承保基礎與過失責任 -->
         <section class="section-block">
             <div class="section-header">
                 <h2>二、雇主意外險承保基礎與過失責任</h2>
@@ -574,44 +644,37 @@
                 <table class="comparison-table">
                     <thead>
                         <tr>
-                            <th style="text-align: center; vertical-align: middle;">評估項目</th>
-                            <th style="text-align: center; vertical-align: middle;">金豐專案「金盾7-條款解析」</th>
-                            <th style="text-align: center; vertical-align: middle;">保險規劃重點</th>
-                            <th style="text-align: center; vertical-align: middle;">法務風險與抵充效果解析</th>
+                            <th>評估項目</th>
+                            <th>金豐專案「金盾7-條款解析」</th>
+                            <th>保險規劃重點</th>
+                            <th>法務風險與抵充效果解析</th>
                         </tr>
                     </thead>
                     <tbody>
-    
                         <tr>
                             <td><strong>3.無過失責任與高保額開啟</strong></td>
-                            <td>AELE037明訂依勞基法負職災補償責任時，不論雇主有無過失皆可開啟雇主意外險高保額（200萬~500萬）；AELE009明訂排除比例分攤
-，AED給付完畢後，民事超額部分由AEL全額接軌填補
-。</td>
+                            <td>AELE037明訂依勞基法負職災補償責任時，不論雇主有無過失皆可開啟雇主意外險高保額（200萬~500萬）；AELE009明訂排除比例分攤，AED給付完畢後，民事超額部分由AEL全額接軌填補。</td>
                             <td>標準條款限縮為《民法》過失侵權責任；主險明文將「勞基法補償責任」除外。雇主若無過失，保險公司便以未觸發條款拒賠。</td>
                             <td>《勞基法》第59條屬法定無過失責任。若無AELE037特約，雇主在無過失時將面臨巨大責任缺口，高額雇主險形同虛設，雇主仍需自掏腰包。</td>
                         </tr>
-        
                         <tr>
                             <td><strong>4.上下班途中車禍責任</strong></td>
-                            <td>AELE023明訂受僱人於上下班途中發生意外體傷或死亡
-，「依法（含勞基法）」應負責任均予理賠。</td>
+                            <td>AELE023明訂受僱人於上下班途中發生意外體傷或死亡，「依法（含勞基法）」應負責任均予理賠。</td>
                             <td>傳統雇主險多以「依民法負賠償責任」為前提。因雇主對員工通勤事故多無民法過失，保險公司往往拒賠。</td>
-                            <td>通勤車禍屬法定職災，雇主負有勞基法無過失補償責任
-。金盾7打破民法過失門檻，確保高額醫療與工資補償金能順利啟動理賠。</td>
+                            <td>通勤車禍屬法定職災，雇主負有勞基法無過失補償責任。金盾7打破民法過失門檻，確保高額醫療與工資補償金能順利啟動理賠。</td>
                         </tr>
-        
                         <tr>
                             <td><strong>5.職業等級表限制</strong></td>
                             <td>採責任險架構，以企業申報之「經營業務種類」整體計費。內部職務調動或現場支援，只要依合法指示執行職務，理賠絕不打折。</td>
                             <td>傳統商業團險依個人職業等級（1~6類）計費。職務異動危險增加若未即時書面通知，保險公司得打折理賠或拒賠。</td>
                             <td>徹底根除人資因漏報或未即時變更職業類別，導致職災理賠遭打折扣減或引發勞資糾紛之風險。</td>
                         </tr>
-        
                     </tbody>
                 </table>
             </div>
         </section>
-    
+
+        <!-- 三、特殊事故擴充與定額慰問金條件 -->
         <section class="section-block">
             <div class="section-header">
                 <h2>三、特殊事故擴充與定額慰問金條件</h2>
@@ -620,47 +683,43 @@
                 <table class="comparison-table">
                     <thead>
                         <tr>
-                            <th style="text-align: center; vertical-align: middle;">評估項目</th>
-                            <th style="text-align: center; vertical-align: middle;">金豐專案「金盾7-條款解析」</th>
-                            <th style="text-align: center; vertical-align: middle;">保險規劃重點</th>
-                            <th style="text-align: center; vertical-align: middle;">法務風險與抵充效果解析</th>
+                            <th>評估項目</th>
+                            <th>金豐專案「金盾7-條款解析」</th>
+                            <th>保險規劃重點</th>
+                            <th>法務風險與抵充效果解析</th>
                         </tr>
                     </thead>
                     <tbody>
-    
                         <tr>
                             <td><strong>6.重大燒燙傷生存天數與身故給付</strong></td>
                             <td>完全無「須存活滿六日」之文字限制；符合等級無須等待立即認定。後續若不幸身故，燒燙傷補償金與身故補償金各自獨立給付、不互扣。</td>
                             <td>業界同業多設有6~15天存活限制，事故初期死亡即無法領取重大燒燙傷保險金。</td>
                             <td>重大火災、爆燃職災初期死亡率極高，金盾7提供燒燙傷與身故雙重保障，確保企業取得足額理賠以撫恤遺屬並抵充責任。</td>
                         </tr>
-        
                         <tr>
                             <td><strong>7.門診手術與住院兩階段慰問金</strong></td>
                             <td>AELE038B明訂門診手術治療（免住院，如裂傷縫合）即給付探視慰問金2,000元；AELE033明訂住院滿3日給付一次、達7日再給一次（住院7日以上享雙倍慰問金）。</td>
                             <td>一般保單同一事故住院慰問金以給付一次為限；且門診處置多非標準內含項目。</td>
                             <td>提供極佳勞資關係撫慰效益，免住院的小型門診處置亦能即時展現企業關懷，化解潛在對立情緒。</td>
                         </tr>
-        
                         <tr>
                             <td><strong>8.天災（颱風、地震）責任開啟</strong></td>
                             <td>AELE002明訂颱風、地震、海嘯、土崩等天然災變致受僱人傷亡，依約負賠償之責，串接AED補償險，無論有無過失均可給付。</td>
                             <td>一般主險條款均將「天然災變」列為共同除外不保事項；未附加天災特約時完全拒賠。</td>
                             <td>因應極端氣候，完整填補颱風假出勤意外或突發地震廠房受損帶來的巨額雇主賠償缺口。</td>
                         </tr>
-        
                         <tr>
                             <td><strong>9.涵蓋境外（全球公差）</strong></td>
                             <td>AELE004明訂受僱人於海外執行職務發生意外體傷或身故均予承保，AED補償險可直接給付海外醫療、日額與死亡失能補償。</td>
                             <td>主契約預設皆排除臺灣地區以外之事故責任。</td>
                             <td>依審查準則，海外出差視同執行職務。</td>
                         </tr>
-        
                     </tbody>
                 </table>
             </div>
         </section>
-    
+
+        <!-- 四、理賠受領順位與法律抗辯機制 -->
         <section class="section-block">
             <div class="section-header">
                 <h2>四、理賠受領順位與法律抗辯機制</h2>
@@ -669,42 +728,37 @@
                 <table class="comparison-table">
                     <thead>
                         <tr>
-                            <th style="text-align: center; vertical-align: middle;">評估項目</th>
-                            <th style="text-align: center; vertical-align: middle;">金豐專案「金盾7-條款解析」</th>
-                            <th style="text-align: center; vertical-align: middle;">保險規劃重點</th>
-                            <th style="text-align: center; vertical-align: middle;">法務風險與抵充效果解析</th>
+                            <th>評估項目</th>
+                            <th>金豐專案「金盾7-條款解析」</th>
+                            <th>保險規劃重點</th>
+                            <th>法務風險與抵充效果解析</th>
                         </tr>
                     </thead>
                     <tbody>
-    
                         <tr>
                             <td><strong>10.身故補償受領權人順位</strong></td>
                             <td>條款明確約定依《勞基法》第59條第1項第4款順位受領（順位：配偶/子女➔父母➔祖父母➔孫子女➔兄弟姊妹）。</td>
                             <td>傳統團險多依壽險慣例約定為「民法法定繼承人」。</td>
                             <td>核心抵充效力所在。雇主投保係依勞基法第60條主張抵充。若款項錯發給民法繼承人，將無法抵充勞基法補償，面臨被法定遺屬二次求償之重大風險。</td>
                         </tr>
-        
                         <tr>
                             <td><strong>11.雇主已墊付保險金之匯回權</strong></td>
                             <td>依AED條款，主約被保險人即為「企業雇主」。雇主若已先行墊付醫療或補償金，檢附支付單據款項即可直接給付予雇主；亦可經雇主同意直接付予員工。</td>
                             <td>傳統團體傷害險屬人身保險，受益人僅限勞工或遺屬，保險公司依法必須將理賠款直接匯入勞工帳戶。</td>
                             <td>確保企業資金主導權。避免雇主在職災當下基於法定義務先行墊付數百萬元後，保險金卻無法匯回公司帳戶，造成雙重財務損失。</td>
                         </tr>
-        
                         <tr>
                             <td><strong>12.訴訟外調解與抗辯費用負擔</strong></td>
                             <td>免經繁瑣法院訴訟程序，條款明訂以「和解書」或「仲裁判斷書」即可確認賠償責任並撥款；保險公司派員協助協調民事爭端，並由保險公司負擔抗辯費用。</td>
-                            <td>傳統團保完全不參與雇主與勞工間的民事賠償協調，亦不負擔任何訴訟或調解費用
-，雇主須自聘法務或律師面對冗長官司。</td>
-                            <td>當勞方主張管理疏失提出高額民事求償時，保險提供實質專業法律抗辯與費用支援
-，大幅縮短賠付時程、平息勞資糾紛。</td>
+                            <td>傳統團保完全不參與雇主與勞工間的民事賠償協調，亦不負擔任何訴訟或調解費用，雇主須自聘法務或律師面對冗長官司。</td>
+                            <td>當勞方主張管理疏失提出高額民事求償時，保險提供實質專業法律抗辯與費用支援，大幅縮短賠付時程、平息勞資糾紛。</td>
                         </tr>
-        
                     </tbody>
                 </table>
             </div>
         </section>
-    
+
+        <!-- 諮詢需求單 -->
         <section class="form-section" id="demand-form">
             <div class="form-title-group">
                 <h2>諮詢需求單</h2>
@@ -714,7 +768,7 @@
                 </div>
             </div>
             <form id="inquiryForm" onsubmit="handleFormSubmit(event)">
-                <!-- 安全防護：Honeypot 機器人陷阱欄位（隱藏欄位，真人不會填寫，機器人填寫則阻擋） -->
+                <!-- 安全防護：Honeypot 機器人陷阱欄位 -->
                 <div style="display:none !important;" aria-hidden="true">
                     <input type="text" name="_hp_security_check" tabindex="-1" autocomplete="off">
                 </div>
@@ -762,55 +816,54 @@
                     <div class="form-group full-width">
                         <label>諮詢評估需求項目（可複選）</label>
                         <div class="checkbox-container">
-                            
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="1.異動生效起算時點">
-            <span>1.異動生效起算時點</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="2.預約投保機制">
-            <span>2.預約投保機制</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="3.無過失責任與高保額開啟">
-            <span>3.無過失責任與高保額開啟</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="4.上下班途中車禍責任">
-            <span>4.上下班途中車禍責任</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="5.職業等級表限制">
-            <span>5.職業等級表限制</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="6.重大燒燙傷生存天數與身故給付">
-            <span>6.重大燒燙傷生存天數與身故給付</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="7.門診手術與住院兩階段慰問金">
-            <span>7.門診手術與住院兩階段慰問金</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="8.天災（颱風、地震）責任開啟">
-            <span>8.天災（颱風、地震）責任開啟</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="9.涵蓋境外（全球公差）">
-            <span>9.涵蓋境外（全球公差）</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="10.身故補償受領權人順位">
-            <span>10.身故補償受領權人順位</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="11.雇主已墊付保險金之匯回權">
-            <span>11.雇主已墊付保險金之匯回權</span>
-        </label>
-        <label class="checkbox-item">
-            <input type="checkbox" name="demand_items" value="12.訴訟外調解與抗辯費用負擔">
-            <span>12.訴訟外調解與抗辯費用負擔</span>
-        </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="1.異動生效起算時點">
+                                <span>1.異動生效起算時點</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="2.預約投保機制">
+                                <span>2.預約投保機制</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="3.無過失責任與高保額開啟">
+                                <span>3.無過失責任與高保額開啟</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="4.上下班途中車禍責任">
+                                <span>4.上下班途中車禍責任</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="5.職業等級表限制">
+                                <span>5.職業等級表限制</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="6.重大燒燙傷生存天數與身故給付">
+                                <span>6.重大燒燙傷生存天數與身故給付</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="7.門診手術與住院兩階段慰問金">
+                                <span>7.門診手術與住院兩階段慰問金</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="8.天災（颱風、地震）責任開啟">
+                                <span>8.天災（颱風、地震）責任開啟</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="9.涵蓋境外（全球公差）">
+                                <span>9.涵蓋境外（全球公差）</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="10.身故補償受領權人順位">
+                                <span>10.身故補償受領權人順位</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="11.雇主已墊付保險金之匯回權">
+                                <span>11.雇主已墊付保險金之匯回權</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="demand_items" value="12.訴訟外調解與抗辯費用負擔">
+                                <span>12.訴訟外調解與抗辯費用負擔</span>
+                            </label>
                         </div>
                     </div>
                     <div class="form-group full-width">
@@ -825,7 +878,7 @@
         </section>
     </main>
 
-    <!-- Bottom Floating Bar -->
+    <!-- 手機底部懸浮快速操作列 -->
     <div class="bottom-floating-bar">
         <a href="tel:0986887855" class="floating-item phone">
             洽詢電話
@@ -838,7 +891,7 @@
         </a>
     </div>
 
-    <!-- Submission Modal -->
+    <!-- 送出成功提示視窗 -->
     <div class="modal-overlay" id="successModal">
         <div class="modal-box">
             <h3 id="modalTitle">諮詢需求單已成功送出</h3>
@@ -853,14 +906,33 @@
     <script>
         // =========================================================================
         // 【GitHub Pages 後端 API 設定】
-        // 請將您從 Google 試算表「擴充功能 > Apps Script > 部署 > 網頁應用程式」所獲得的網址貼在此處：
-        // 範例格式：https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxx/exec
+        // 已成功綁定您的 Google Apps Script 網頁應用程式接收網址
         // =========================================================================
         const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxplrFkaFO2EX0D2q8ejYmTt4FN9DjINCIbq4qIcL9bkuMq_sat3bxZGbGINLvPFaDf/exec"; 
 
         const NOTIFICATION_TARGET_EMAIL = "360.aiup@gmail.com";
         let lastSubmitTime = 0;
         const pageLoadTime = Date.now();
+
+        // 7.png 圖檔收合與展開切換（右上角懸浮小箭頭）
+        function toggleImage() {
+            const container = document.getElementById('imageContainer');
+            const wrapper = document.getElementById('imageWrapper');
+            const icon = document.getElementById('toggleIcon');
+            const text = document.getElementById('toggleText');
+            
+            if (wrapper.style.display === 'none') {
+                wrapper.style.display = 'block';
+                container.classList.remove('collapsed');
+                icon.innerText = '▲';
+                text.style.display = 'none';
+            } else {
+                wrapper.style.display = 'none';
+                container.classList.add('collapsed');
+                icon.innerText = '▼';
+                text.style.display = 'inline';
+            }
+        }
 
         // XSS 安全過濾器：清除特殊危險字元
         function sanitizeInput(str) {
@@ -881,7 +953,7 @@
             
             // 1. 手機：09 開頭，共 10 碼（支援 0986887855、0986-887855、0986-887-855）
             if (cleaned.startsWith('09')) {
-                return /^09\d{2}-?\d{3}-?\d{3}$|^09\d{2}-?\d{6}$|^09\d{8}$/.test(cleaned);
+                return /^(09\d{8}|09\d{2}-\d{6}|09\d{2}-\d{3}-\d{3})$/.test(cleaned);
             }
             
             // 2. 市話：0 開頭（非 09），包含台灣各縣市區碼（支援分機 #）
@@ -917,19 +989,19 @@
             const form = document.getElementById('inquiryForm');
             const submitBtn = document.getElementById('submitBtn');
 
-            // 1. 安全防護：Honeypot 機器人防禦（若隱藏欄位有值，表示為自動機器人提交，直接封鎖）
+            // 1. 安全防護：Honeypot 機器人防禦
             if (form._hp_security_check && form._hp_security_check.value !== '') {
                 console.warn('Bot submission blocked.');
                 return false;
             }
 
-            // 2. 安全防護：防止腳本快刷（頁面載入未滿 2 秒提交視為非正常行為）
+            // 2. 安全防護：防止腳本快刷（載入未滿 2 秒送出視為異常）
             if (Date.now() - pageLoadTime < 2000) {
                 alert('系統安全檢測：請稍候再點擊送出。');
                 return false;
             }
 
-            // 3. 安全防護：防重複提交與點擊轟炸（限制 10 秒內不得連續送出）
+            // 3. 安全防護：防重複提交與點擊轟炸（10 秒冷卻）
             if (Date.now() - lastSubmitTime < 10000) {
                 alert('您的需求單已在傳送中，請勿頻繁重複點擊！');
                 return false;
@@ -972,21 +1044,17 @@
                 notifyEmail: NOTIFICATION_TARGET_EMAIL
             };
 
-            // 鎖定送出按鈕避免重複點擊
             submitBtn.disabled = true;
             submitBtn.innerText = '正在安全加密傳送中...';
             lastSubmitTime = Date.now();
 
-            // 本地暫存紀錄（確保資料安全不遺失）
             let submissions = JSON.parse(localStorage.getItem('fubon_gold7_submissions') || '[]');
             submissions.push(formData);
             localStorage.setItem('fubon_gold7_submissions', JSON.stringify(submissions));
 
-            // 後端傳送：判斷是否已設定 Apps Script 網址
             const targetUrl = GOOGLE_APPS_SCRIPT_URL.trim();
 
             if (targetUrl && targetUrl.startsWith('https://script.google.com/')) {
-                // 透過 CORS-safe 傳送至 Google Apps Script Web App
                 fetch(targetUrl, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -1002,7 +1070,6 @@
                     submitBtn.innerText = '送出諮詢需求單';
                 });
             } else {
-                // 尚未設定 Apps Script 網址時，顯示提醒說明
                 submitBtn.disabled = false;
                 submitBtn.innerText = '送出諮詢需求單';
                 showSuccessModal(false);
